@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,9 +31,8 @@ class BannerController extends BaseBannerController {
   }
 }
 
-///活动图片轮播图组件：目前只在德国T10推广场景中出现，没有数据默认占位20.h
-class ActivityBannerWidget extends StatefulWidget {
-  const ActivityBannerWidget({
+class BannerWidget extends StatefulWidget {
+  const BannerWidget({
     super.key,
     this.itemClick,
     required this.controller,
@@ -42,11 +43,11 @@ class ActivityBannerWidget extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _ActivityBannerWidgetState();
+    return _BannerWidgetState();
   }
 }
 
-class _ActivityBannerWidgetState extends State<ActivityBannerWidget> {
+class _BannerWidgetState extends State<BannerWidget> {
   @override
   void initState() {
     super.initState();
@@ -59,25 +60,28 @@ class _ActivityBannerWidgetState extends State<ActivityBannerWidget> {
         initialData: widget.controller?.logic?.state,
         stream: widget.controller?.logic?.getStream(),
         builder: (context, AsyncSnapshot<BannerState> snapshot) {
-          // if (snapshot.data?.bannerList == null || snapshot.data?.bannerList?.isEmpty == true) {
-          //   return SizedBox(height: 20.h);
-          // }
+          if (snapshot.data?.bannerList == null || snapshot.data?.bannerList?.isEmpty == true) {
+            return SizedBox(height: 20.h);
+          }
           return Container(
               width: double.infinity,
-              height: 100.h,
-              margin: EdgeInsets.only(left: 23.w, right: 23.w, top: 20.h, bottom: 20.h),
+              height: 150.h,
+              margin: EdgeInsets.only(left: 23.w, right: 23.w, top: 20.h),
               child: Swiper(
+                indicatorLayout: PageIndicatorLayout.NONE,
                 autoplayDelay: 5000,
                 duration: 800,
                 autoplay: true,
-                // pagination: const SwiperPagination(),
-                control: SwiperControl(size: 15.r),
+                pagination: SwiperPagination(
+                    margin: EdgeInsets.all(5.r),
+                    builder: DotSwiperPaginationBuilder(
+                        size: 8.r, activeColor: Colors.blueAccent, color: Colors.grey)),
+                // control: SwiperControl(size: 5.r),
                 autoplayDisableOnInteraction: false,
                 onTap: (int index) {
-                  // var url = snapshot.data?.bannerList?[index]?.outUrl ?? "";
-                  //
-                  // log("ActivityBannerWidget banner点击 地址=$url");
-                  // widget.itemClick?.call(url);
+                  var url = snapshot.data?.bannerList?[index]?.url ?? "";
+                  log("BannerWidget banner点击 地址=$url");
+                  widget.itemClick?.call(url);
                 },
                 itemBuilder: (BuildContext context, int index) {
                   return ClipRRect(
@@ -89,9 +93,9 @@ class _ActivityBannerWidgetState extends State<ActivityBannerWidget> {
                               child: CircularProgressIndicator(),
                             );
                           },
-                          imageUrl: ""));
+                          imageUrl: snapshot.data?.bannerList?[index]?.imagePath ?? ""));
                 },
-                itemCount:  0,
+                itemCount: snapshot.data?.bannerList?.length ?? 0,
               ));
         });
   }

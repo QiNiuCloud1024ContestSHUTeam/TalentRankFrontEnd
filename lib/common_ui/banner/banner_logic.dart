@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:wan_android_flutter/repository/api/wan_api.dart';
+import 'package:wan_android_flutter/repository/model/home_banner_model.dart';
+
 
 class BannerLogic {
   //初始化状态数据
@@ -18,15 +21,15 @@ class BannerLogic {
     return _controller.stream;
   }
 
-  ///德国T10并机推广-获取Banner列表
+  ///获取Banner列表
   Future getBannerList() async {
-    // try {
-    //   ActivityListBannerModel? bannerModel = await ActivityAPI.getAdvertisementBanner();
-    //   state.bannerList = bannerModel?.list;
-    // } catch (error) {
-    //   state.bannerList = [];
-    // }
-    // _controller.add(state);
+    try {
+      List<HomeBannerModel?>? banner = await WanApi.instance().bannerList();
+      state.bannerList = banner;
+    } catch (error) {
+      state.bannerList = [];
+    }
+    _controller.add(state);
   }
 
   //需要在state-》dispose中调用
@@ -36,5 +39,5 @@ class BannerLogic {
 }
 
 class BannerState {
-  // List<ActivityBannerModel?>? bannerList = [];
+  List<HomeBannerModel?>? bannerList = [];
 }

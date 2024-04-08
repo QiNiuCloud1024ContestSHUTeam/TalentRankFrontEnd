@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wan_android_flutter/common_ui/navigation/navigation_bar_widget.dart';
-import 'package:wan_android_flutter/pages/home_list_page.dart';
+import 'package:wan_android_flutter/pages/home/home_list_page.dart';
 import 'package:wan_android_flutter/pages/hot_key_page.dart';
 import 'package:wan_android_flutter/pages/knowledge_page.dart';
 import 'package:wan_android_flutter/pages/mine_page.dart';
