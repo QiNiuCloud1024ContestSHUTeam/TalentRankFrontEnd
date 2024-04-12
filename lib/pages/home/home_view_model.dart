@@ -6,12 +6,31 @@ import '../../repository/model/home_list_model.dart';
 class HomeViewModel with ChangeNotifier {
   List<HomeListItemData>? listData = [];
 
+  Future initDataList() async {
+    listData?.clear();
+    //先获取置顶列表
+    _getTopHomeList().then((topList) {
+      listData?.addAll(topList ?? []);
+      _getHomeList().then((list) {
+        listData?.addAll(list ?? []);
+        notifyListeners();
+      });
+    });
+
+  }
+
   ///获取数据
-  Future getHomeList() async {
+  Future<List<HomeListItemData>?> _getHomeList() async {
     HomeListModel? data = await WanApi.instance().homeList();
     if (data != null) {
-      listData = data.datas ?? [];
-      notifyListeners();
+      return data.datas;
     }
+    return [];
+  }
+
+  ///获取置顶文章列表
+  Future<List<HomeListItemData>?> _getTopHomeList() async {
+    HomeTopListModel? data = await WanApi.instance().topHomeList();
+    return data.dataList;
   }
 }

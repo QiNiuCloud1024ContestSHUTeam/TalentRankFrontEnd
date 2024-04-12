@@ -44,7 +44,7 @@ class DioInstance {
   ///get请求方式
   Future<Response> get({
     required String path,
-    HashMap<String, dynamic>? param,
+    Map<String, dynamic>? param,
     Options? options,
     CancelToken? cancelToken,
   }) async {

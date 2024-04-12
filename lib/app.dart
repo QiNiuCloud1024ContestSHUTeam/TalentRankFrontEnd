@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:wan_android_flutter/pages/tab_page.dart';
+import 'package:wan_android_flutter/utils/RouteUtils.dart';
+import 'package:wan_android_flutter/utils/Routes.dart';
 
 /// 设计尺寸
 Size get designSize {
@@ -32,7 +34,10 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             useMaterial3: true,
           ),
-          home: const TabPage(),
+          navigatorKey: RouteUtils.navigatorKey,
+          onGenerateRoute: Routes.generateRoute,
+          initialRoute: RoutePath.tab,
+          // home: const TabPage(),
         );
       },
     ));

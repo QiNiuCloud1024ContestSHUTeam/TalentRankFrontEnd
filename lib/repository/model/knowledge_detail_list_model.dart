@@ -1,35 +1,8 @@
-import '../../http/base_model.dart';
+import 'dart:collection';
 
-// class HomeListModel {
-//   HomeListModel({
-//     this.data,
-//     this.errorCode,
-//     this.errorMsg,
-//   });
-//
-//   HomeListModel.fromJson(dynamic json) {
-//     data = json['data'] != null ? HomeListData.fromJson(json['data']) : null;
-//     errorCode = json['errorCode'];
-//     errorMsg = json['errorMsg'];
-//   }
-//
-//   HomeListData? data;
-//   num? errorCode;
-//   String? errorMsg;
-//
-//   Map<String, dynamic> toJson() {
-//     final map = <String, dynamic>{};
-//     if (data != null) {
-//       map['data'] = data?.toJson();
-//     }
-//     map['errorCode'] = errorCode;
-//     map['errorMsg'] = errorMsg;
-//     return map;
-//   }
-// }
-
-class HomeListModel {
-  HomeListModel({
+///知识体系明细列表数据
+class KnowledgeDetailListModel {
+  KnowledgeDetailListModel({
     this.curPage,
     this.datas,
     this.offset,
@@ -39,12 +12,12 @@ class HomeListModel {
     this.total,
   });
 
-  HomeListModel.fromJson(Map<String, dynamic>? json) {
+  KnowledgeDetailListModel.fromJson(Map<String, dynamic>? json) {
     curPage = json?['curPage'];
-    if (json?['datas'] != null) {
+    if (json?['datas'] != null && json?['datas'] is List) {
       datas = [];
       json?['datas'].forEach((v) {
-        datas?.add(HomeListItemData.fromJson(v));
+        datas?.add(KnowledgeDetailItem.fromJson(v));
       });
     }
     offset = json?['offset'];
@@ -55,7 +28,7 @@ class HomeListModel {
   }
 
   num? curPage;
-  List<HomeListItemData>? datas;
+  List<KnowledgeDetailItem>? datas;
   num? offset;
   bool? over;
   num? pageCount;
@@ -77,21 +50,44 @@ class HomeListModel {
   }
 }
 
-///置顶列表返回数据
-class HomeTopListModel {
-  List<HomeListItemData>? dataList = [];
+/// adminAdd : false
+/// apkLink : ""
+/// audit : 1
+/// author : ""
+/// canEdit : false
+/// chapterId : 60
+/// chapterName : "Android Studio相关"
+/// collect : false
+/// courseId : 13
+/// desc : ""
+/// descMd : ""
+/// envelopePic : ""
+/// fresh : false
+/// host : ""
+/// id : 12871
+/// isAdminAdd : false
+/// link : "https://juejin.im/post/5e94815551882573af79b2a0"
+/// niceDate : "2020-04-14 00:05"
+/// niceShareDate : "2020-04-13 23:58"
+/// origin : ""
+/// prefix : ""
+/// projectLink : ""
+/// publishTime : 1586793921000
+/// realSuperChapterId : 150
+/// selfVisible : 0
+/// shareDate : 1586793515000
+/// shareUser : "鸿洋"
+/// superChapterId : 60
+/// superChapterName : "开发环境"
+/// tags : []
+/// title : "数据库还可以这么看？（Android Studio 4.1 新特性）"
+/// type : 0
+/// userId : 2
+/// visible : 1
+/// zan : 0
 
-  HomeTopListModel.fromJson(dynamic json) {
-    if (json is List) {
-      for (var element in json) {
-        dataList?.add(HomeListItemData.fromJson(element));
-      }
-    }
-  }
-}
-
-class HomeListItemData {
-  HomeListItemData({
+class KnowledgeDetailItem {
+  KnowledgeDetailItem({
     this.adminAdd,
     this.apkLink,
     this.audit,
@@ -123,14 +119,13 @@ class HomeListItemData {
     this.superChapterName,
     this.tags,
     this.title,
-    //0=普通 1=置顶
     this.type,
     this.userId,
     this.visible,
     this.zan,
   });
 
-  HomeListItemData.fromJson(Map<String, dynamic>? json) {
+  KnowledgeDetailItem.fromJson(Map<String, dynamic>? json) {
     adminAdd = json?['adminAdd'];
     apkLink = json?['apkLink'];
     audit = json?['audit'];

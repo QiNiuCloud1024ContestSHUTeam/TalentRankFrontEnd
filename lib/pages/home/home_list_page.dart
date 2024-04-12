@@ -24,7 +24,7 @@ class _HomeListPageState extends State<HomeListPage> {
   @override
   void initState() {
     super.initState();
-    model.getHomeList();
+    model.initDataList();
   }
 
   @override
@@ -35,28 +35,28 @@ class _HomeListPageState extends State<HomeListPage> {
       },
       builder: (BuildContext context, Widget? child) {
         return Scaffold(
-            body: Container(
-                padding: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
-                child: SingleChildScrollView(
-                    child: Column(
-                  children: [
-                    BannerWidget(
-                      controller: bannerController,
-                      itemClick: (url) {},
-                    ),
-                    Consumer<HomeViewModel>(
-                      builder: (context, value, child) {
-                        return ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: value.listData?.length ?? 0,
-                            itemBuilder: (BuildContext context, int index) {
-                              return _listItem(value.listData?[index]);
-                            });
-                      },
-                    )
-                  ],
-                ))));
+            body: SafeArea(
+          child: SingleChildScrollView(
+              child: Column(
+            children: [
+              BannerWidget(
+                controller: bannerController,
+                itemClick: (url) {},
+              ),
+              Consumer<HomeViewModel>(
+                builder: (context, value, child) {
+                  return ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: value.listData?.length ?? 0,
+                      itemBuilder: (BuildContext context, int index) {
+                        return _listItem(value.listData?[index]);
+                      });
+                },
+              )
+            ],
+          )),
+        ));
       },
     );
   }
@@ -85,7 +85,7 @@ class _HomeListPageState extends State<HomeListPage> {
               SizedBox(
                 width: 10.w,
               ),
-              Text("置顶",
+              Text(item?.type == 1 ? "置顶" : "",
                   style: TextStyle(
                       fontSize: 15.sp, fontWeight: FontWeight.w600, color: Colors.blueAccent))
             ]),
