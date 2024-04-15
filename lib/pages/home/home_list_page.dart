@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:wan_android_flutter/common_ui/banner/home_banner_widget.dart';
 import 'package:wan_android_flutter/pages/home/home_view_model.dart';
 
+import '../../common_ui/common_styles.dart';
 import '../../repository/model/home_list_model.dart';
 
 ///首页文章列表页面
@@ -79,9 +80,9 @@ class _HomeListPageState extends State<HomeListPage> {
                   child: Image.asset("assets/images/luoxiaohei.png",
                       width: 25.r, height: 25.r, fit: BoxFit.fill)),
               SizedBox(width: 5.w),
-              Text(item?.author ?? ""),
+              normalText(item?.author),
               const Expanded(child: SizedBox()),
-              Text(item?.niceShareDate ?? ""),
+              normalText(item?.niceShareDate),
               SizedBox(
                 width: 10.w,
               ),
@@ -92,7 +93,7 @@ class _HomeListPageState extends State<HomeListPage> {
             SizedBox(height: 5.h),
             Text(
               item?.title ?? "",
-              style: TextStyle(fontSize: 15.sp),
+              style: titleTextStyle15,
             ),
             SizedBox(height: 5.h),
             Row(children: [

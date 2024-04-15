@@ -2,9 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:wan_android_flutter/pages/tab_page.dart';
-import 'package:wan_android_flutter/utils/RouteUtils.dart';
-import 'package:wan_android_flutter/utils/Routes.dart';
+import 'package:wan_android_flutter/route/RouteUtils.dart';
+import 'package:wan_android_flutter/route/Routes.dart';
 
 /// 设计尺寸
 Size get designSize {

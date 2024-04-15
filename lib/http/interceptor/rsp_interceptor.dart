@@ -11,11 +11,15 @@ class RspInterceptor extends Interceptor {
     if (response.statusCode == 200) {
       var rsp = BaseModel.fromJson(response.data);
       if (rsp.errorCode == 0) {
-        handler.next(Response(requestOptions: response.requestOptions, data: rsp.data));
+        if (rsp.data == null) {
+          handler.next(Response(requestOptions: response.requestOptions, data: true));
+        } else {
+          handler.next(Response(requestOptions: response.requestOptions, data: rsp.data));
+        }
       } else if (rsp.errorCode == -1001) {
         handler.reject(DioException(requestOptions: response.requestOptions, message: "未登录"));
         showToast("请先登录");
-      }else{
+      } else {
         handler.reject(DioException(requestOptions: response.requestOptions));
       }
     } else {

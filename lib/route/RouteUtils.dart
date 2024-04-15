@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 ///方便路由跳转的工具类
 class RouteUtils {
+  RouteUtils._();
+
   static final navigatorKey = GlobalKey<NavigatorState>();
 
   // App 根节点Context

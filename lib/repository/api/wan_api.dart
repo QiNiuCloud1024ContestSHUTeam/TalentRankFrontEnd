@@ -8,6 +8,7 @@ import 'package:wan_android_flutter/repository/model/knowledge_list_model.dart';
 
 import '../model/common_website_model.dart';
 import '../model/search_hot_key_model.dart';
+import '../model/user_info_model.dart';
 
 class WanApi {
   static WanApi? _instance;
@@ -76,5 +77,29 @@ class WanApi {
         await DioInstance.instance().get(path: "article/list/0/json", param: {"cid": id});
     var model = KnowledgeDetailListModel.fromJson(response.data);
     return model.datas;
+  }
+
+  ///登录
+  Future<UserInfoModel?> login(String? name, String? pwd) async {
+    Response response = await DioInstance.instance()
+        .post(path: "/user/login", queryParameters: {"username": name, "password": pwd});
+    return UserInfoModel.fromJson(response.data);
+  }
+
+  ///注册
+  Future<UserInfoModel?> register(String? name, String? pwd, String? pwdTwice) async {
+    Response response = await DioInstance.instance().post(
+        path: "user/register",
+        queryParameters: {"username": name, "password": pwd, "repassword": pwdTwice});
+    return UserInfoModel.fromJson(response.data);
+  }
+
+  ///登出
+  Future<bool> logout() async {
+    Response response = await DioInstance.instance().get(path: "user/logout/json");
+    if (response.data != null && response.data == true) {
+      return true;
+    }
+    return false;
   }
 }

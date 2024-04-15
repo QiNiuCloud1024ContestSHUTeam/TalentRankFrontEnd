@@ -4,7 +4,7 @@ import 'package:wan_android_flutter/common_ui/navigation/navigation_bar_widget.d
 import 'package:wan_android_flutter/pages/home/home_list_page.dart';
 import 'package:wan_android_flutter/pages/hot/hot_key_page.dart';
 import 'package:wan_android_flutter/pages/knowledge/knowledge_page.dart';
-import 'package:wan_android_flutter/pages/mine_page.dart';
+import 'package:wan_android_flutter/pages/mine/mine_page.dart';
 
 class TabPage extends StatefulWidget {
   const TabPage({super.key});

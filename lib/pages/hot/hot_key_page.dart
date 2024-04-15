@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:wan_android_flutter/pages/hot/hot_common_view_model.dart';
 
+import '../../common_ui/common_styles.dart';
+
 ///热点搜索页面
 class HotKeyPage extends StatefulWidget {
   const HotKeyPage({super.key});
@@ -53,7 +55,7 @@ class _HotKeyPageState extends State<HotKeyPage> {
       alignment: Alignment.centerLeft,
       width: double.infinity,
       height: 45.h,
-      child: Text(title),
+      child: normalText(title),
     );
   }
 

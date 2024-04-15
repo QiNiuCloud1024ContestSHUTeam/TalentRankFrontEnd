@@ -5,8 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:wan_android_flutter/common_ui/navigation/navigation_bar_widget.dart';
 import 'package:wan_android_flutter/pages/knowledge/details/knowledge_details_page.dart';
 import 'package:wan_android_flutter/repository/model/knowledge_list_model.dart';
-import 'package:wan_android_flutter/utils/RouteUtils.dart';
+import 'package:wan_android_flutter/route/RouteUtils.dart';
 
+import '../../common_ui/common_styles.dart';
 import 'knowledge_view_model.dart';
 
 ///知识体系页面
@@ -63,7 +64,7 @@ class _KnowledgePageState extends State<KnowledgePage> {
             child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(item?.name ?? ""),
+                Text(item?.name ?? "",style: titleTextStyle15,),
                 SizedBox(height: 10.h),
                 Text(model.generalChildNames(item?.children)),
               ])),

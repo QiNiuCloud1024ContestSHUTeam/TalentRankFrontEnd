@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:wan_android_flutter/pages/knowledge/details/knowledge_details_view_model.dart';
 
+import '../../../common_ui/common_styles.dart';
 import '../../../repository/model/knowledge_detail_list_model.dart';
 
 class DetailTabPage extends StatefulWidget {
@@ -65,16 +66,15 @@ class _DetailTabPageState extends State<DetailTabPage> {
         child: Column(children: [
           Row(
             children: [
-              Text("${item.superChapterName}"),
-
+              normalText(item.superChapterName),
               Expanded(child: SizedBox()),
               Text("${item.niceShareDate}"),
             ],
           ),
-          Text("${item.title}"),
+          Text("${item.title}", style: titleTextStyle15),
           Row(
             children: [
-              Text("${item.chapterName}"),
+              normalText(item.chapterName),
               Expanded(child: SizedBox()),
               Text("${item.shareUser}"),
             ],

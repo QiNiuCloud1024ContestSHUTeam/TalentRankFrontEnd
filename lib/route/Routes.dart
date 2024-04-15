@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wan_android_flutter/pages/auth/login_page.dart';
+import 'package:wan_android_flutter/pages/auth/register_page.dart';
 import 'package:wan_android_flutter/pages/knowledge/details/knowledge_details_page.dart';
 import 'package:wan_android_flutter/pages/tab_page.dart';
 
@@ -13,6 +15,12 @@ class Routes {
       //知识体系明细页面
       case RoutePath.knowledge_details:
         return pageRoute(const KnowledgeDetailsPage(), settings: settings);
+      //登录
+      case RoutePath.login:
+        return pageRoute(const LoginPage(), settings: settings);
+      //注册
+      case RoutePath.register:
+        return pageRoute(const RegisterPage(), settings: settings);
     }
     return MaterialPageRoute(
         builder: (context) =>
