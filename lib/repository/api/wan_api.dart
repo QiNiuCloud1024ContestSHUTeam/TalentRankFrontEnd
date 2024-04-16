@@ -102,4 +102,22 @@ class WanApi {
     }
     return false;
   }
+
+  ///收藏
+  Future<bool> collect(String id) async {
+    Response response = await DioInstance.instance().post(path: "lg/collect/$id/json");
+    if (response.data != null && response.data == true) {
+      return true;
+    }
+    return false;
+  }
+
+  ///取消收藏文章
+  Future<bool> cancelCollect(String id) async {
+    Response response = await DioInstance.instance().post(path: "/lg/uncollect_originId/$id/json");
+    if (response.data != null && response.data == true) {
+      return true;
+    }
+    return false;
+  }
 }

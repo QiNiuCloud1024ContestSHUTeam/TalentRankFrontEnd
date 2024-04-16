@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../repository/api/wan_api.dart';
@@ -16,7 +17,6 @@ class HomeViewModel with ChangeNotifier {
         notifyListeners();
       });
     });
-
   }
 
   ///获取数据
@@ -32,5 +32,23 @@ class HomeViewModel with ChangeNotifier {
   Future<List<HomeListItemData>?> _getTopHomeList() async {
     HomeTopListModel? data = await WanApi.instance().topHomeList();
     return data.dataList;
+  }
+
+  ///收藏文章
+  Future collect(int index, String? id) async {
+    bool success = await WanApi.instance().collect(id ?? "");
+    if (success) {
+      listData?[index].collect = true;
+      notifyListeners();
+    }
+  }
+
+  ///取消收藏文章
+  Future cancelCollect(int index, String? id) async {
+    bool success = await WanApi.instance().cancelCollect(id ?? "");
+    if (success) {
+      listData?[index].collect = false;
+      notifyListeners();
+    }
   }
 }

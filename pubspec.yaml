@@ -19,6 +19,9 @@ dependencies:
     flutter_screenutil: ^5.9.0-beta
     # 网络请求
     dio: ^5.3.4
+    # cookie持久化
+    dio_cookie_manager: ^3.1.1
+    cookie_jar: ^4.0.8
     # toast提示
     oktoast: ^3.3.1
     # 获取版本信息设备信息等
