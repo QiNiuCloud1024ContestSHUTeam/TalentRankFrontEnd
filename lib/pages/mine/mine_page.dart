@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:wan_android_flutter/pages/about/about_us_page.dart';
 import 'package:wan_android_flutter/pages/auth/login_page.dart';
 import 'package:wan_android_flutter/pages/mine/mine_view_model.dart';
 import 'package:wan_android_flutter/pages/my_collects/my_collects_page.dart';
@@ -53,13 +54,17 @@ class _MinePageState extends State<MinePage> {
                   title: "我的收藏",
                   onTap: () {
                     if (model.shouldLogin == true) {
-                      RouteUtils.push(context, LoginPage());
+                      RouteUtils.push(context, const LoginPage());
                     } else {
-                      RouteUtils.push(context, MyCollectsPage());
+                      RouteUtils.push(context, const MyCollectsPage());
                     }
                   }),
               _commonItem(title: "检查更新", onTap: () {}),
-              _commonItem(title: "关于我们", onTap: () {}),
+              _commonItem(
+                  title: "关于我们",
+                  onTap: () {
+                    RouteUtils.push(context, const AboutUsPage());
+                  }),
               _logoutButton(() {
                 model.logout();
               })

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wan_android_flutter/common_ui/web/webview_page.dart';
 import 'package:wan_android_flutter/common_ui/web/webview_widget.dart';
+import 'package:wan_android_flutter/pages/about/about_us_page.dart';
 import 'package:wan_android_flutter/pages/auth/login_page.dart';
 import 'package:wan_android_flutter/pages/auth/register_page.dart';
 import 'package:wan_android_flutter/pages/knowledge/details/knowledge_details_page.dart';
@@ -31,6 +32,9 @@ class Routes {
       case RoutePath.web_view:
         return pageRoute(WebViewPage(loadResource: "", webViewType: WebViewType.URL),
             settings: settings);
+      //关于我们
+      case RoutePath.about_us:
+        return pageRoute(const AboutUsPage(), settings: settings);
     }
     return MaterialPageRoute(
         builder: (context) =>
@@ -72,4 +76,7 @@ class RoutePath {
 
   //显示网页资源的页面
   static const String web_view = "/web_view";
+
+  //关于我们
+  static const String about_us = "/about_us";
 }
