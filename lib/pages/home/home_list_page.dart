@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:wan_android_flutter/common_ui/banner/home_banner_widget.dart';
+import 'package:wan_android_flutter/common_ui/web/webview_page.dart';
+import 'package:wan_android_flutter/common_ui/web/webview_widget.dart';
 import 'package:wan_android_flutter/pages/home/home_view_model.dart';
+import 'package:wan_android_flutter/route/RouteUtils.dart';
 
 import '../../common_ui/common_styles.dart';
 import '../../repository/model/home_list_model.dart';
@@ -39,7 +42,16 @@ class _HomeListPageState extends State<HomeListPage> {
                   child: Column(children: [
         BannerWidget(
           controller: bannerController,
-          itemClick: (url) {},
+          itemClick: (title, url) {
+            //进入网页
+            RouteUtils.push(
+                context,
+                WebViewPage(
+                    loadResource: url,
+                    webViewType: WebViewType.URL,
+                    showTitle: true,
+                    title: title));
+          },
         ),
         Consumer<HomeViewModel>(builder: (context, value, child) {
           return ListView.builder(
@@ -50,7 +62,16 @@ class _HomeListPageState extends State<HomeListPage> {
                 HomeListItemData? item = value.listData?[index];
                 return _listItem(
                     item: item,
-                    onItemClick: () {},
+                    onItemClick: () {
+                      //进入网页
+                      RouteUtils.push(
+                          context,
+                          WebViewPage(
+                              loadResource: item?.link ?? "",
+                              webViewType: WebViewType.URL,
+                              showTitle: true,
+                              title: item?.title));
+                    },
                     imageClick: () {
                       if (item?.collect == true) {
                         //取消收藏

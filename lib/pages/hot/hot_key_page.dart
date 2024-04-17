@@ -5,6 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:wan_android_flutter/pages/hot/hot_common_view_model.dart';
 
 import '../../common_ui/common_styles.dart';
+import '../../common_ui/web/webview_page.dart';
+import '../../common_ui/web/webview_widget.dart';
+import '../../route/RouteUtils.dart';
 
 ///热点搜索页面
 class HotKeyPage extends StatefulWidget {
@@ -71,11 +74,20 @@ class _HotKeyPageState extends State<HotKeyPage> {
   }
 
   ///常用网站列表
-  Widget _commonWebsiteListView() {
+  Widget _commonWebsiteListView({GestureTapCallback? itemClick}) {
     return Consumer<HotCommonViewModel>(builder: (context, value, child) {
       return _gridview(
           itemBuilder: (context, index) {
-            return _item(value.websiteList[index].name, onTap: () {});
+            return _item(value.websiteList[index].name, onTap: () {
+              //进入网页
+              RouteUtils.push(
+                  context,
+                  WebViewPage(
+                      loadResource: value.websiteList[index].link ?? "",
+                      webViewType: WebViewType.URL,
+                      showTitle: true,
+                      title: value.websiteList[index].name));
+            });
           },
           itemCount: value.websiteList.length);
     });

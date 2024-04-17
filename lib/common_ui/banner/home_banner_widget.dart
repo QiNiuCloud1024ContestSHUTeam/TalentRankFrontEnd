@@ -31,6 +31,8 @@ class BannerController extends BaseBannerController {
   }
 }
 
+typedef BannerClick = Function(String title, String url);
+
 class BannerWidget extends StatefulWidget {
   const BannerWidget({
     super.key,
@@ -38,7 +40,7 @@ class BannerWidget extends StatefulWidget {
     required this.controller,
   });
 
-  final ValueChanged<String?>? itemClick;
+  final BannerClick? itemClick;
   final BannerController? controller;
 
   @override
@@ -80,8 +82,9 @@ class _BannerWidgetState extends State<BannerWidget> {
                 autoplayDisableOnInteraction: false,
                 onTap: (int index) {
                   var url = snapshot.data?.bannerList?[index]?.url ?? "";
+                  var title = snapshot.data?.bannerList?[index]?.title ?? "";
                   log("BannerWidget banner点击 地址=$url");
-                  widget.itemClick?.call(url);
+                  widget.itemClick?.call(title, url);
                 },
                 itemBuilder: (BuildContext context, int index) {
                   return ClipRRect(

@@ -5,7 +5,10 @@ import 'package:provider/provider.dart';
 import 'package:wan_android_flutter/pages/knowledge/details/knowledge_details_view_model.dart';
 
 import '../../../common_ui/common_styles.dart';
+import '../../../common_ui/web/webview_page.dart';
+import '../../../common_ui/web/webview_widget.dart';
 import '../../../repository/model/knowledge_detail_list_model.dart';
+import '../../../route/RouteUtils.dart';
 
 class DetailTabPage extends StatefulWidget {
   final String? id;
@@ -52,33 +55,44 @@ class _DetailTabPageState extends State<DetailTabPage> {
         return ListView.builder(
             itemCount: value.detailList.length,
             itemBuilder: (context, index) {
-              return _item(value.detailList[index]);
+              return _item(value.detailList[index], onTap: () {
+                //进入网页
+                RouteUtils.push(
+                    context,
+                    WebViewPage(
+                        loadResource: value.detailList[index].link ?? "",
+                        webViewType: WebViewType.URL,
+                        showTitle: true,
+                        title: value.detailList[index].title));
+              });
             });
       })),
     );
   }
 
-  Widget _item(KnowledgeDetailItem item) {
-    return Container(
-        margin: EdgeInsets.symmetric(vertical: 8.h, horizontal: 15.w),
-        padding: EdgeInsets.all(10.r),
-        decoration: BoxDecoration(border: Border.all(color: Colors.black12, width: 0.5.r)),
-        child: Column(children: [
-          Row(
-            children: [
-              normalText(item.superChapterName),
-              Expanded(child: SizedBox()),
-              Text("${item.niceShareDate}"),
-            ],
-          ),
-          Text("${item.title}", style: titleTextStyle15),
-          Row(
-            children: [
-              normalText(item.chapterName),
-              Expanded(child: SizedBox()),
-              Text("${item.shareUser}"),
-            ],
-          )
-        ]));
+  Widget _item(KnowledgeDetailItem item, {GestureTapCallback? onTap}) {
+    return GestureDetector(
+        onTap: onTap,
+        child: Container(
+            margin: EdgeInsets.symmetric(vertical: 8.h, horizontal: 15.w),
+            padding: EdgeInsets.all(10.r),
+            decoration: BoxDecoration(border: Border.all(color: Colors.black12, width: 0.5.r)),
+            child: Column(children: [
+              Row(
+                children: [
+                  normalText(item.superChapterName),
+                  Expanded(child: SizedBox()),
+                  Text("${item.niceShareDate}"),
+                ],
+              ),
+              Text("${item.title}", style: titleTextStyle15),
+              Row(
+                children: [
+                  normalText(item.chapterName),
+                  Expanded(child: SizedBox()),
+                  Text("${item.shareUser}"),
+                ],
+              )
+            ])));
   }
 }

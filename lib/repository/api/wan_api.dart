@@ -115,7 +115,7 @@ class WanApi {
 
   ///取消收藏文章
   Future<bool> cancelCollect(String id) async {
-    Response response = await DioInstance.instance().post(path: "/lg/uncollect_originId/$id/json");
+    Response response = await DioInstance.instance().post(path: "lg/uncollect_originId/$id/json");
     if (response.data != null && response.data == true) {
       return true;
     }
@@ -124,7 +124,7 @@ class WanApi {
 
   ///获取我的收藏列表
   Future<List<MyCollectItemModel>?> getMyCollects() async {
-    Response rsp = await DioInstance.instance().get(path: "/lg/collect/list/0/json");
+    Response rsp = await DioInstance.instance().get(path: "lg/collect/list/0/json");
     MyCollectsModel? model = MyCollectsModel.fromJson(rsp.data);
     if (model.datas != null && model.datas?.isNotEmpty == true) {
       return model.datas;
