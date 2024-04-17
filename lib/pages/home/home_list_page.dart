@@ -107,20 +107,8 @@ class _HomeListPageState extends State<HomeListPage> {
                   style: TextStyle(fontSize: 13.sp, color: Colors.green),
                 ),
                 const Expanded(child: SizedBox()),
-                _collectImage(item, onTap: imageClick)
+                collectImage(item?.collect, onTap: imageClick)
               ])
             ])));
-  }
-
-  Widget _collectImage(HomeListItemData? item, {GestureTapCallback? onTap}) {
-    return GestureDetector(
-        onTap: onTap,
-        child: Image.asset(
-            item?.collect == true
-                ? "assets/images/img_collect"
-                    ".png"
-                : "assets/images/img_collect_grey.png",
-            width: 25.r,
-            height: 25.r));
   }
 }

@@ -5,6 +5,7 @@ import 'package:wan_android_flutter/repository/model/home_banner_model.dart';
 import 'package:wan_android_flutter/repository/model/home_list_model.dart';
 import 'package:wan_android_flutter/repository/model/knowledge_detail_list_model.dart';
 import 'package:wan_android_flutter/repository/model/knowledge_list_model.dart';
+import 'package:wan_android_flutter/repository/model/my_collects_model.dart';
 
 import '../model/common_website_model.dart';
 import '../model/search_hot_key_model.dart';
@@ -119,5 +120,15 @@ class WanApi {
       return true;
     }
     return false;
+  }
+
+  ///获取我的收藏列表
+  Future<List<MyCollectItemModel>?> getMyCollects() async {
+    Response rsp = await DioInstance.instance().get(path: "/lg/collect/list/0/json");
+    MyCollectsModel? model = MyCollectsModel.fromJson(rsp.data);
+    if (model.datas != null && model.datas?.isNotEmpty == true) {
+      return model.datas;
+    }
+    return [];
   }
 }

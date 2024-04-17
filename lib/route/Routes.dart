@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wan_android_flutter/common_ui/web/webview_page.dart';
+import 'package:wan_android_flutter/common_ui/web/webview_widget.dart';
 import 'package:wan_android_flutter/pages/auth/login_page.dart';
 import 'package:wan_android_flutter/pages/auth/register_page.dart';
 import 'package:wan_android_flutter/pages/knowledge/details/knowledge_details_page.dart';
+import 'package:wan_android_flutter/pages/my_collects/my_collects_page.dart';
 import 'package:wan_android_flutter/pages/tab_page.dart';
 
 ///路由注册管理类
@@ -21,6 +24,13 @@ class Routes {
       //注册
       case RoutePath.register:
         return pageRoute(const RegisterPage(), settings: settings);
+      //我的收藏页面
+      case RoutePath.my_collects:
+        return pageRoute(const MyCollectsPage(), settings: settings);
+      //显示网页资源的页面
+      case RoutePath.web_view:
+        return pageRoute(WebViewPage(loadResource: "", webViewType: WebViewType.URL),
+            settings: settings);
     }
     return MaterialPageRoute(
         builder: (context) =>
@@ -56,4 +66,10 @@ class RoutePath {
 
   //知识体系明细页面
   static const String knowledge_details = "/knowledge_details";
+
+  //我的收藏页面
+  static const String my_collects = "/my_collects";
+
+  //显示网页资源的页面
+  static const String web_view = "/web_view";
 }

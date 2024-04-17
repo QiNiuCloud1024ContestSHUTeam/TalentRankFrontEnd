@@ -41,6 +41,8 @@ dependencies:
     flutter_swiper_view: ^1.1.8
     # 图片缓存加载
     cached_network_image: ^3.2.2
+    #webview：基于原生webview封装的
+    flutter_inappwebview: ^5.8.0
 dev_dependencies:
     flutter_test:
         sdk: flutter
