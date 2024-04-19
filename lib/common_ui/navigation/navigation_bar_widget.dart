@@ -72,6 +72,7 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.white,
         //tab页面
         body: IndexedStack(index: widget.currentIndex, children: widget.tabItems),
         //底部导航栏
@@ -82,6 +83,7 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
                 highlightColor: Colors.transparent,
               ),
           child: BottomNavigationBar(
+              backgroundColor: Colors.white,
               type: widget.bottomNavigationBarType ?? BottomNavigationBarType.fixed,
               currentIndex: widget.currentIndex,
               onTap: (index) {

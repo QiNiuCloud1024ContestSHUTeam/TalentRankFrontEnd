@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:wan_android_flutter/common_ui/smart_refresh/smart_refresh_widget.dart';
 import 'package:wan_android_flutter/pages/knowledge/details/knowledge_details_view_model.dart';
 
 import '../../../common_ui/common_styles.dart';
@@ -11,63 +13,71 @@ import '../../../common_ui/web/webview_widget.dart';
 import '../../../repository/model/knowledge_detail_list_model.dart';
 import '../../../route/RouteUtils.dart';
 
-class DetailTabPage extends StatefulWidget {
+///知识体系明细tab页签页面
+class DetailTabChildPage extends StatefulWidget {
   final String? id;
 
-  const DetailTabPage({super.key, this.id});
+  const DetailTabChildPage({super.key, this.id});
 
   @override
   State<StatefulWidget> createState() {
-    return _DetailTabPageState();
+    return _DetailTabChildPageState();
   }
 }
 
-class _DetailTabPageState extends State<DetailTabPage> {
+class _DetailTabChildPageState extends State<DetailTabChildPage> {
   var model = KnowledgeDetailsViewModel();
+  late RefreshController _refreshController;
 
   @override
   void initState() {
+    _refreshController = RefreshController();
     super.initState();
-    model.getDetailList(widget.id);
+    refreshOrLoad(false);
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void refreshOrLoad(bool loadMore) {
+    model.getDetailList(widget.id, loadMore).then((value) {
+      if (loadMore) {
+        _refreshController.loadComplete();
+      } else {
+        _refreshController.refreshCompleted();
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    // context.watch<KnowledgeDetailsViewModel>().getDetailList(widget.id);
-    // return Scaffold(body:
-    // Consumer<KnowledgeDetailsViewModel>(builder: (context, value, child) {
-    //   return ListView.builder(
-    //       itemCount: value.detailList.length,
-    //       itemBuilder: (context, index) {
-    //         return _item(value.detailList[index]);
-    //       });
-    // }));
-    //
     return ChangeNotifierProvider(
       create: (context) {
         return model;
       },
-      child: Scaffold(body: Consumer<KnowledgeDetailsViewModel>(builder: (context, value, child) {
-        return ListView.builder(
-            itemCount: value.detailList.length,
-            itemBuilder: (context, index) {
-              return _item(value.detailList[index], onTap: () {
-                //进入网页
-                RouteUtils.push(
-                    context,
-                    WebViewPage(
-                        loadResource: value.detailList[index].link ?? "",
-                        webViewType: WebViewType.URL,
-                        showTitle: true,
-                        title: value.detailList[index].title));
-              });
-            });
-      })),
+      child: Scaffold(
+          backgroundColor: Colors.white,
+          body: Consumer<KnowledgeDetailsViewModel>(builder: (context, value, child) {
+            return SmartRefreshWidget(
+                controller: _refreshController,
+                onRefresh: () {
+                  refreshOrLoad(false);
+                },
+                onLoading: () {
+                  refreshOrLoad(true);
+                },
+                child: ListView.builder(
+                    itemCount: value.detailList.length,
+                    itemBuilder: (context, index) {
+                      return _item(value.detailList[index], onTap: () {
+                        //进入网页
+                        RouteUtils.push(
+                            context,
+                            WebViewPage(
+                                loadResource: value.detailList[index].link ?? "",
+                                webViewType: WebViewType.URL,
+                                showTitle: true,
+                                title: value.detailList[index].title));
+                      });
+                    }));
+          })),
     );
   }
 

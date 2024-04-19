@@ -31,7 +31,7 @@ class DioInstance {
     ResponseType? responseType = ResponseType.json,
     String? contentType,
   }) async {
-    _dio.options = BaseOptions(
+    _dio.options = buildBaseOptions(
         method: method,
         baseUrl: baseUrl,
         connectTimeout: connectTimeout ?? _defaultTimeout,
@@ -89,5 +89,28 @@ class DioInstance {
               receiveTimeout: _defaultTimeout,
               sendTimeout: _defaultTimeout,
             ));
+  }
+
+  BaseOptions buildBaseOptions({
+    required String baseUrl,
+    String? method = HttpMethod.GET,
+    Duration? connectTimeout,
+    Duration? receiveTimeout,
+    Duration? sendTimeout,
+    ResponseType? responseType = ResponseType.json,
+    String? contentType,
+  }) {
+    return BaseOptions(
+        method: method,
+        baseUrl: baseUrl,
+        connectTimeout: connectTimeout ?? _defaultTimeout,
+        receiveTimeout: receiveTimeout ?? _defaultTimeout,
+        sendTimeout: sendTimeout ?? _defaultTimeout,
+        responseType: responseType,
+        contentType: contentType);
+  }
+
+  void changeBaseUrl(String baseUrl){
+    _dio.options.baseUrl = baseUrl;
   }
 }

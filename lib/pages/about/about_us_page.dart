@@ -53,6 +53,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(title: const Text("关于我们")),
         body: SafeArea(
             child: SingleChildScrollView(

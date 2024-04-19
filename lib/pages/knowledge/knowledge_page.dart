@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:wan_android_flutter/common_ui/navigation/navigation_bar_widget.dart';
-import 'package:wan_android_flutter/pages/knowledge/details/knowledge_details_page.dart';
+import 'package:wan_android_flutter/common_ui/smart_refresh/smart_refresh_widget.dart';
+import 'package:wan_android_flutter/pages/knowledge/details/knowledge_details_tab_page.dart';
 import 'package:wan_android_flutter/repository/model/knowledge_list_model.dart';
 import 'package:wan_android_flutter/route/RouteUtils.dart';
 
@@ -22,9 +24,11 @@ class KnowledgePage extends StatefulWidget {
 
 class _KnowledgePageState extends State<KnowledgePage> {
   var model = KnowledgeViewModel();
+  late RefreshController _refreshController;
 
   @override
   void initState() {
+    _refreshController = RefreshController();
     super.initState();
     model.getKnowledgeList();
   }
@@ -32,16 +36,29 @@ class _KnowledgePageState extends State<KnowledgePage> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) {
-        return model;
-      },
-      child: Scaffold(body: SafeArea(child: knowledgeListview())),
-    );
+        create: (context) {
+          return model;
+        },
+        child: Scaffold(
+            backgroundColor: Colors.white,
+            body: SafeArea(
+                child: SmartRefreshWidget(
+                    enablePullUp: false,
+                    onRefresh: () {
+                      model.getKnowledgeList().then((value) {
+                        //关闭刷新
+                        _refreshController.refreshCompleted();
+                      });
+                    },
+                    controller: _refreshController,
+                    child: knowledgeListview()))));
   }
 
   Widget knowledgeListview() {
     return Consumer<KnowledgeViewModel>(builder: (context, value, child) {
       return ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: value.list?.length ?? 0,
           itemBuilder: (context, index) {
             return knowledgeItem(value.list?[index]);
@@ -53,7 +70,7 @@ class _KnowledgePageState extends State<KnowledgePage> {
     return GestureDetector(
         onTap: () {
           RouteUtils.push(
-              context, KnowledgeDetailsPage(params: model.generalParams(item?.children)));
+              context, KnowledgeDetailsTabPage(params: model.generalParams(item?.children)));
         },
         child: Container(
             margin: EdgeInsets.symmetric(horizontal: 15.w, vertical: 8.h),
@@ -64,7 +81,10 @@ class _KnowledgePageState extends State<KnowledgePage> {
             child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(item?.name ?? "",style: titleTextStyle15,),
+                Text(
+                  item?.name ?? "",
+                  style: titleTextStyle15,
+                ),
                 SizedBox(height: 10.h),
                 Text(model.generalChildNames(item?.children)),
               ])),

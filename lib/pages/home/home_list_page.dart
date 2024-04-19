@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:wan_android_flutter/common_ui/banner/home_banner_widget.dart';
 import 'package:wan_android_flutter/common_ui/web/webview_page.dart';
 import 'package:wan_android_flutter/common_ui/web/webview_widget.dart';
@@ -9,6 +10,7 @@ import 'package:wan_android_flutter/pages/home/home_view_model.dart';
 import 'package:wan_android_flutter/route/RouteUtils.dart';
 
 import '../../common_ui/common_styles.dart';
+import '../../common_ui/smart_refresh/smart_refresh_widget.dart';
 import '../../repository/model/home_list_model.dart';
 
 ///首页文章列表页面
@@ -24,11 +26,23 @@ class HomeListPage extends StatefulWidget {
 class _HomeListPageState extends State<HomeListPage> {
   var model = HomeViewModel();
   BannerController? bannerController = BannerController();
+  late RefreshController _refreshController;
 
   @override
   void initState() {
+    _refreshController = RefreshController(initialRefresh: false);
     super.initState();
-    model.initDataList();
+    model.initDataList(false);
+  }
+
+  void refreshOrLoad(bool loadMore) {
+    model.initDataList(loadMore, complete: (loadMore) {
+      if (loadMore) {
+        _refreshController.loadComplete();
+      } else {
+        _refreshController.refreshCompleted();
+      }
+    });
   }
 
   @override
@@ -37,53 +51,62 @@ class _HomeListPageState extends State<HomeListPage> {
       return model;
     }, builder: (BuildContext context, Widget? child) {
       return Scaffold(
+          backgroundColor: Colors.white,
           body: SafeArea(
-              child: SingleChildScrollView(
-                  child: Column(children: [
-        BannerWidget(
-          controller: bannerController,
-          itemClick: (title, url) {
-            //进入网页
-            RouteUtils.push(
-                context,
-                WebViewPage(
-                    loadResource: url,
-                    webViewType: WebViewType.URL,
-                    showTitle: true,
-                    title: title));
-          },
-        ),
-        Consumer<HomeViewModel>(builder: (context, value, child) {
-          return ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: value.listData?.length ?? 0,
-              itemBuilder: (BuildContext context, int index) {
-                HomeListItemData? item = value.listData?[index];
-                return _listItem(
-                    item: item,
-                    onItemClick: () {
-                      //进入网页
-                      RouteUtils.push(
-                          context,
-                          WebViewPage(
-                              loadResource: item?.link ?? "",
-                              webViewType: WebViewType.URL,
-                              showTitle: true,
-                              title: item?.title));
-                    },
-                    imageClick: () {
-                      if (item?.collect == true) {
-                        //取消收藏
-                        model.cancelCollect(index, "${item?.id}");
-                      } else {
-                        //收藏
-                        model.collect(index, "${item?.id}");
-                      }
-                    });
-              });
-        })
-      ]))));
+              child: SmartRefreshWidget(
+                  controller: _refreshController,
+                  onLoading: () {
+                    refreshOrLoad(true);
+                  },
+                  onRefresh: () {
+                    refreshOrLoad(false);
+                  },
+                  child: SingleChildScrollView(
+                      child: Column(children: [
+                    BannerWidget(
+                      controller: bannerController,
+                      itemClick: (title, url) {
+                        //进入网页
+                        RouteUtils.push(
+                            context,
+                            WebViewPage(
+                                loadResource: url,
+                                webViewType: WebViewType.URL,
+                                showTitle: true,
+                                title: title));
+                      },
+                    ),
+                    Consumer<HomeViewModel>(builder: (context, value, child) {
+                      return ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: value.listData?.length ?? 0,
+                          itemBuilder: (BuildContext context, int index) {
+                            HomeListItemData? item = value.listData?[index];
+                            return _listItem(
+                                item: item,
+                                onItemClick: () {
+                                  //进入网页
+                                  RouteUtils.push(
+                                      context,
+                                      WebViewPage(
+                                          loadResource: item?.link ?? "",
+                                          webViewType: WebViewType.URL,
+                                          showTitle: true,
+                                          title: item?.title));
+                                },
+                                imageClick: () {
+                                  if (item?.collect == true) {
+                                    //取消收藏
+                                    model.cancelCollect(index, "${item?.id}");
+                                  } else {
+                                    //收藏
+                                    model.collect(index, "${item?.id}");
+                                  }
+                                });
+                          });
+                    })
+                  ])))));
     });
   }
 

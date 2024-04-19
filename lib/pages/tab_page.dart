@@ -49,6 +49,7 @@ class _TabPageState extends State<TabPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: null,
       body: NavigationBarWidget(
         tabItems: tabItems,

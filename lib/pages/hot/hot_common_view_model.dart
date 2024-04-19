@@ -8,26 +8,31 @@ class HotCommonViewModel with ChangeNotifier {
   List<SearchHotKeyModel> hotKeyList = [];
   List<CommonWebsiteModel> websiteList = [];
 
-  Future getData() async {
-    getHotKeyList();
-    commonWebsiteList();
+  Future getData({VoidCallback? complete}) async {
+    getHotKeyList(complete: () {
+      commonWebsiteList(complete: () {
+        complete?.call();
+      });
+    });
   }
 
   ///获取搜索热词
-  Future getHotKeyList() async {
+  Future getHotKeyList({VoidCallback? complete}) async {
     var list = await WanApi.instance().searchHotKeys();
     if (list != null) {
       hotKeyList = list;
       notifyListeners();
     }
+    complete?.call();
   }
 
   ///获取搜索热词
-  Future commonWebsiteList() async {
+  Future commonWebsiteList({VoidCallback? complete}) async {
     var list = await WanApi.instance().commonWebsiteList();
     if (list != null) {
       websiteList = list;
       notifyListeners();
     }
+    complete?.call();
   }
 }

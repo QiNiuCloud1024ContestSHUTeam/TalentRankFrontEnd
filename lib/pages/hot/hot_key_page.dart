@@ -2,7 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:wan_android_flutter/common_ui/smart_refresh/smart_refresh_widget.dart';
 import 'package:wan_android_flutter/pages/hot/hot_common_view_model.dart';
+import 'package:wan_android_flutter/pages/search/search_page.dart';
 
 import '../../common_ui/common_styles.dart';
 import '../../common_ui/web/webview_page.dart';
@@ -21,9 +24,11 @@ class HotKeyPage extends StatefulWidget {
 
 class _HotKeyPageState extends State<HotKeyPage> {
   var model = HotCommonViewModel();
+  late RefreshController _refreshController;
 
   @override
   void initState() {
+    _refreshController = RefreshController(initialRefresh: false);
     super.initState();
     model.getData();
   }
@@ -35,31 +40,56 @@ class _HotKeyPageState extends State<HotKeyPage> {
           return model;
         },
         child: Scaffold(
+            backgroundColor: Colors.white,
             body: SafeArea(
-                child: SingleChildScrollView(
-                    child: Column(children: [
-          _titleWidget("搜索热词"),
-          SizedBox(height: 20.h),
-          //搜索热词列表
-          _searchHotKeyListView(),
-          SizedBox(height: 20.h),
-          _titleWidget("常用网站"),
-          SizedBox(height: 20.h),
-          //常用网站列表
-          _commonWebsiteListView(),
-          SizedBox(height: 20.h),
-        ])))));
+                child: SmartRefreshWidget(
+                    controller: _refreshController,
+                    //禁止上拉
+                    enablePullUp: false,
+                    onRefresh: () {
+                      //刷新回调
+                      model.getData(complete: () {
+                        //结束刷新
+                        _refreshController.refreshCompleted();
+                      });
+                    },
+                    child: SingleChildScrollView(
+                        child: Column(children: [
+                      _titleWidget("搜索热词", true, onTap: () {
+                        RouteUtils.push(context, const SearchPage());
+                      }),
+                      SizedBox(height: 20.h),
+                      //搜索热词列表
+                      _searchHotKeyListView(),
+                      SizedBox(height: 20.h),
+                      _titleWidget("常用网站", false),
+                      SizedBox(height: 20.h),
+                      //常用网站列表
+                      _commonWebsiteListView(),
+                      SizedBox(height: 20.h),
+                    ]))))));
   }
 
-  Widget _titleWidget(String title) {
-    return Container(
-      color: Colors.lightBlueAccent,
-      padding: EdgeInsets.only(left: 15.w),
-      alignment: Alignment.centerLeft,
-      width: double.infinity,
-      height: 45.h,
-      child: normalText(title),
-    );
+  Widget _titleWidget(String title, bool search, {GestureTapCallback? onTap}) {
+    return Column(children: [
+      Container(width: double.infinity, height: 0.5.h, color: Colors.black12),
+      Container(
+        color: Colors.white,
+        padding: EdgeInsets.only(left: 15.w, right: 10.w),
+        alignment: Alignment.centerLeft,
+        width: double.infinity,
+        height: 45.h,
+        child: search
+            ? Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                normalText(title),
+                GestureDetector(
+                    onTap: onTap,
+                    child: Image.asset("assets/images/icon_search.png", width: 30.r, height: 30.r))
+              ])
+            : normalText(title),
+      ),
+      Container(width: double.infinity, height: 0.5.h, color: Colors.black12)
+    ]);
   }
 
   ///搜索热词列表
@@ -67,7 +97,10 @@ class _HotKeyPageState extends State<HotKeyPage> {
     return Consumer<HotCommonViewModel>(builder: (context, value, child) {
       return _gridview(
           itemBuilder: (context, index) {
-            return _item(value.hotKeyList[index].name, onTap: () {});
+            var name = value.hotKeyList[index].name;
+            return _item(name, onTap: () {
+              RouteUtils.push(context, SearchPage(keyWord: name));
+            });
           },
           itemCount: value.hotKeyList.length);
     });
@@ -116,14 +149,15 @@ class _HotKeyPageState extends State<HotKeyPage> {
     return Container(
       decoration: BoxDecoration(
           border: Border.all(color: Colors.black12),
-          borderRadius: BorderRadius.all(Radius.circular(30.r))),
+          borderRadius: BorderRadius.all(Radius.circular(15.r))),
       alignment: Alignment.center,
-      padding: EdgeInsets.only(top: 5.h, bottom: 5.h, left: 10.w, right: 10.w),
+      padding: EdgeInsets.only(top: 5.h, bottom: 5.h, left: 5.w, right: 5.w),
       child: InkWell(
           onTap: onTap,
           child: Text(
             title ?? "",
             textAlign: TextAlign.center,
+            style: blackTextStyle13,
           )),
     );
   }

@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:wan_android_flutter/common_ui/smart_refresh/smart_refresh_widget.dart';
 import 'package:wan_android_flutter/repository/model/my_collects_model.dart';
 
 import '../../common_ui/common_styles.dart';
@@ -22,11 +24,23 @@ class MyCollectsPage extends StatefulWidget {
 
 class _MyCollectsPageState extends State<MyCollectsPage> {
   var model = MyCollectsViewModel();
+  late RefreshController _refreshController;
 
   @override
   void initState() {
+    _refreshController = RefreshController();
     super.initState();
-    model.getMyCollects();
+    refreshOrLoad(false);
+  }
+
+  void refreshOrLoad(bool loadMore) {
+    model.getMyCollects(loadMore).then((value) {
+      if (loadMore) {
+        _refreshController.loadComplete();
+      } else {
+        _refreshController.refreshCompleted();
+      }
+    });
   }
 
   @override
@@ -36,31 +50,40 @@ class _MyCollectsPageState extends State<MyCollectsPage> {
           return model;
         },
         child: Scaffold(
+            backgroundColor: Colors.white,
             body: SafeArea(
                 child: Selector<MyCollectsViewModel, List<MyCollectItemModel>?>(
-          builder: (context, list, child) {
-            return ListView.builder(
-                itemCount: list?.length ?? 0,
-                itemBuilder: (context, index) {
-                  return _collectItem(list?[index], onTap: () {
-                    //取消收藏
-                    model.cancelCollect(index, "${list?[index].id}");
-                  }, itemClick: () {
-                    //进入网页
-                    RouteUtils.push(
-                        context,
-                        WebViewPage(
-                            loadResource: list?[index].link ?? "",
-                            webViewType: WebViewType.URL,
-                            showTitle: true,
-                            title: list?[index].title));
-                  });
-                });
-          },
-          selector: (context, vm) {
-            return vm.dataList;
-          },
-        ))));
+              builder: (context, list, child) {
+                return SmartRefreshWidget(
+                    controller: _refreshController,
+                    onRefresh: () {
+                      refreshOrLoad(false);
+                    },
+                    onLoading: () {
+                      refreshOrLoad(true);
+                    },
+                    child: ListView.builder(
+                        itemCount: list?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          return _collectItem(list?[index], onTap: () {
+                            //取消收藏
+                            model.cancelCollect(index, "${list?[index].id}");
+                          }, itemClick: () {
+                            //进入网页
+                            RouteUtils.push(
+                                context,
+                                WebViewPage(
+                                    loadResource: list?[index].link ?? "",
+                                    webViewType: WebViewType.URL,
+                                    showTitle: true,
+                                    title: list?[index].title));
+                          });
+                        }));
+              },
+              selector: (context, vm) {
+                return vm.dataList;
+              },
+            ))));
   }
 
   Widget _collectItem(MyCollectItemModel? item,

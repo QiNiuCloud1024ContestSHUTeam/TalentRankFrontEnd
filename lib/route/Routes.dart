@@ -5,8 +5,9 @@ import 'package:wan_android_flutter/common_ui/web/webview_widget.dart';
 import 'package:wan_android_flutter/pages/about/about_us_page.dart';
 import 'package:wan_android_flutter/pages/auth/login_page.dart';
 import 'package:wan_android_flutter/pages/auth/register_page.dart';
-import 'package:wan_android_flutter/pages/knowledge/details/knowledge_details_page.dart';
+import 'package:wan_android_flutter/pages/knowledge/details/knowledge_details_tab_page.dart';
 import 'package:wan_android_flutter/pages/my_collects/my_collects_page.dart';
+import 'package:wan_android_flutter/pages/search/search_page.dart';
 import 'package:wan_android_flutter/pages/tab_page.dart';
 
 ///路由注册管理类
@@ -18,7 +19,7 @@ class Routes {
         return pageRoute(const TabPage(), settings: settings);
       //知识体系明细页面
       case RoutePath.knowledge_details:
-        return pageRoute(const KnowledgeDetailsPage(), settings: settings);
+        return pageRoute(const KnowledgeDetailsTabPage(), settings: settings);
       //登录
       case RoutePath.login:
         return pageRoute(const LoginPage(), settings: settings);
@@ -35,6 +36,9 @@ class Routes {
       //关于我们
       case RoutePath.about_us:
         return pageRoute(const AboutUsPage(), settings: settings);
+      //搜索页
+      case RoutePath.search:
+        return pageRoute(const SearchPage(), settings: settings);
     }
     return MaterialPageRoute(
         builder: (context) =>
@@ -79,4 +83,7 @@ class RoutePath {
 
   //关于我们
   static const String about_us = "/about_us";
+
+  //搜索页
+  static const String search = "/search";
 }

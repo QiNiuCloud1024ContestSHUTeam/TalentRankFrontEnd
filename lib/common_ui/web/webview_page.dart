@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wan_android_flutter/common_ui/web/webview_widget.dart';
 
 ///显示网页资源的页面
@@ -52,6 +54,22 @@ class _WebViewPageState extends State<WebViewPage> {
 
   Widget _buildAppBarTitle(bool? showTitle, String? title) {
     var show = showTitle ?? false;
-    return show ? Text(title ?? "") : const SizedBox.shrink();
+    return show
+        ? Html(data: title ?? "", style: {
+            //整体样式使用 html
+            "html": Style(fontSize: FontSize(15.sp))
+          })
+        : const SizedBox.shrink();
+  }
+
+  String limitsStr(String? content, {int limit = 15}) {
+    if (content == null || content.isEmpty == true) {
+      return "";
+    }
+    if (content.length > 15) {
+      return content.substring(0, 15);
+    } else {
+      return content;
+    }
   }
 }

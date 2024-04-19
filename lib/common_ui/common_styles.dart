@@ -13,7 +13,7 @@ TextStyle titleTextStyle15 = TextStyle(color: Colors.black, fontSize: 15.sp);
 TextStyle blackTextStyle13 = TextStyle(fontSize: 13.sp, color: Colors.black);
 //普通字体，只做判空处理
 Text normalText(String? text) {
-  return Text(text ?? "");
+  return Text(text ?? "",style: titleTextStyle15,);
 }
 
 TextField commonInputText(

@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:wan_android_flutter/common_ui/loading.dart';
 import 'package:wan_android_flutter/repository/api/wan_api.dart';
 import 'package:wan_android_flutter/repository/model/knowledge_detail_param.dart';
 
@@ -8,11 +9,13 @@ class KnowledgeViewModel with ChangeNotifier {
   List<KnowledgeModel?>? list = [];
 
   Future getKnowledgeList() async {
+    Loading.showLoading();
     var resp = await WanApi.instance().knowledgeList();
     if (resp?.isNotEmpty == true) {
       list = resp;
       notifyListeners();
     }
+    Loading.dismissAll();
   }
 
   String generalChildNames(List<Children?>? children) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:wan_android_flutter/common_ui/loading.dart';
 import 'package:wan_android_flutter/repository/api/wan_api.dart';
 
 import '../../../repository/model/knowledge_detail_list_model.dart';
@@ -11,6 +12,9 @@ class KnowledgeDetailsViewModel with ChangeNotifier {
 
   List<KnowledgeDetailItem> detailList = [];
 
+  //页码
+  int _pageCount = 0;
+
   ///初始化tab列表
   void initTabs(List<KnowledgeDetailParam>? params) {
     if (params?.isNotEmpty == true) {
@@ -21,11 +25,23 @@ class KnowledgeDetailsViewModel with ChangeNotifier {
   }
 
   ///知识体系明细列表数据
-  void getDetailList(String? id) async {
-    var list = await WanApi.instance().knowledgeDetailList(id ?? "");
-    if (list?.isNotEmpty == true) {
-      detailList = list ?? [];
-      notifyListeners();
+  Future getDetailList(String? id, bool loadMore) async {
+    Loading.showLoading();
+    if (loadMore) {
+      _pageCount++;
+    } else {
+      _pageCount = 0;
+      detailList.clear();
     }
+    var list = await WanApi.instance().knowledgeDetailList(id ?? "", "$_pageCount");
+    if (list?.isNotEmpty == true) {
+      detailList.addAll(list ?? []);
+      notifyListeners();
+    } else {
+      if (loadMore && _pageCount > 0) {
+        _pageCount--;
+      }
+    }
+    Loading.dismissAll();
   }
 }

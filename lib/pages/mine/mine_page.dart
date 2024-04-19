@@ -39,6 +39,7 @@ class _MinePageState extends State<MinePage> {
           return model;
         },
         child: Scaffold(
+            backgroundColor: Colors.white,
             appBar: null,
             body: SafeArea(
                 child: Column(children: [
@@ -59,7 +60,9 @@ class _MinePageState extends State<MinePage> {
                       RouteUtils.push(context, const MyCollectsPage());
                     }
                   }),
-              _commonItem(title: "检查更新", onTap: () {}),
+              _commonItem(title: "检查更新", onTap: () {
+                model.checkUpdate();
+              }),
               _commonItem(
                   title: "关于我们",
                   onTap: () {
