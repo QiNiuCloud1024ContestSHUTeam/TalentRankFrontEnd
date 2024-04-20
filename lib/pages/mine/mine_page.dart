@@ -3,7 +3,10 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+import 'package:wan_android_flutter/common_ui/dialog/dialog_factory.dart';
 import 'package:wan_android_flutter/pages/about/about_us_page.dart';
 import 'package:wan_android_flutter/pages/auth/login_page.dart';
 import 'package:wan_android_flutter/pages/mine/mine_view_model.dart';
@@ -60,9 +63,17 @@ class _MinePageState extends State<MinePage> {
                       RouteUtils.push(context, const MyCollectsPage());
                     }
                   }),
-              _commonItem(title: "检查更新", onTap: () {
-                model.checkUpdate();
+              Selector<MineViewModel, bool>(builder: (context, value, child) {
+                return _commonItem(
+                    showRedDot: value,
+                    title: "检查更新",
+                    onTap: () {
+                      checkAppUpdate();
+                    });
+              }, selector: (context, vm) {
+                return vm.needUpdate;
               }),
+
               _commonItem(
                   title: "关于我们",
                   onTap: () {
@@ -72,6 +83,26 @@ class _MinePageState extends State<MinePage> {
                 model.logout();
               })
             ]))));
+  }
+
+  ///检查更新
+  void checkAppUpdate() {
+    model.checkUpdate().then((url) {
+      if (url != null && url.isNotEmpty == true) {
+        DialogFactory.instance.showNeedUpdateDialog(
+            context: context,
+            dismissClick: (){
+              //是否显示更新红点
+              model.shouldShowUpdateDot();
+            },
+            confirmClick: () {
+              //跳转到外部浏览器打开
+              model.jumpToOutLink(url);
+            });
+      } else {
+        showToast("已是最新版本");
+      }
+    });
   }
 
   Widget _userArea({required List<Widget> children}) {
@@ -111,11 +142,11 @@ class _MinePageState extends State<MinePage> {
     ];
   }
 
-  Widget _commonItem({required String title, GestureTapCallback? onTap}) {
+  Widget _commonItem({required String title, GestureTapCallback? onTap, bool? showRedDot}) {
     return GestureDetector(
         onTap: onTap,
         child: Container(
-            padding: EdgeInsets.only(left: 10.w, right: 5.w),
+            padding: EdgeInsets.only(right: 5.w),
             margin: EdgeInsets.only(left: 15.w, right: 15.w, top: 10.h),
             decoration: BoxDecoration(
                 border: Border.all(color: Colors.black38, width: 0.5.r),
@@ -123,6 +154,17 @@ class _MinePageState extends State<MinePage> {
             width: double.infinity,
             height: 45.h,
             child: Row(children: [
+              //不显示红点需要填充一个边距
+              if (showRedDot != true) SizedBox(width: 10.w),
+              //显示红点
+              if (showRedDot == true)
+                Container(
+                  margin: EdgeInsets.only(left: 3.w, right: 4.w),
+                  width: 3.r,
+                  height: 3.r,
+                  decoration: BoxDecoration(
+                      color: Colors.red, borderRadius: BorderRadius.all(Radius.circular(1.5.r))),
+                ),
               Expanded(child: Text(title, style: blackTextStyle13)),
               Image.asset("assets/images/img_arrow_right.png", width: 20.r, height: 20.r)
             ])));

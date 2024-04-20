@@ -12,12 +12,12 @@ class AppCheckUpdateModel {
   AppCheckUpdateModel.fromJson(Map<String, dynamic>? json) {
     code = json?['code'];
     message = json?['message'];
-    data = json?['data'] != null ? Data.fromJson(json?['data']) : null;
+    data = json?['data'] != null ? UpdateInfoData.fromJson(json?['data']) : null;
   }
 
   num? code;
   String? message;
-  Data? data;
+  UpdateInfoData? data;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -48,8 +48,8 @@ class AppCheckUpdateModel {
 /// buildFileKey : "556e82d16b9f1718d76a48a98b40eff2.apk"
 /// buildFileSize : "16977009"
 
-class Data {
-  Data({
+class UpdateInfoData {
+  UpdateInfoData({
     this.buildBuildVersion,
     this.forceUpdateVersion,
     this.forceUpdateVersionNo,
@@ -69,7 +69,7 @@ class Data {
     this.buildFileSize,
   });
 
-  Data.fromJson(Map<String, dynamic>? json) {
+  UpdateInfoData.fromJson(Map<String, dynamic>? json) {
     buildBuildVersion = json?['buildBuildVersion'];
     forceUpdateVersion = json?['forceUpdateVersion'];
     forceUpdateVersionNo = json?['forceUpdateVersionNo'];
@@ -93,8 +93,12 @@ class Data {
   String? forceUpdateVersion;
   String? forceUpdateVersionNo;
   bool? needForceUpdate;
+
+  //app的下载链接
   String? downloadURL;
   bool? buildHaveNewVersion;
+
+  //最新的线上app版本号
   String? buildVersionNo;
   String? buildVersion;
   String? buildDescription;
