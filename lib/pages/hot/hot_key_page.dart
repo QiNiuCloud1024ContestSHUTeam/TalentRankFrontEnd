@@ -55,14 +55,14 @@ class _HotKeyPageState extends State<HotKeyPage> {
                     },
                     child: SingleChildScrollView(
                         child: Column(children: [
-                      _titleWidget("搜索热词", true, onTap: () {
+                      _titleWidget("热门领域", true, onTap: () {
                         RouteUtils.push(context, const SearchPage());
                       }),
                       SizedBox(height: 20.h),
                       //搜索热词列表
                       _searchHotKeyListView(),
                       SizedBox(height: 20.h),
-                      _titleWidget("常用网站", false),
+                      _titleWidget("所有领域", false),
                       SizedBox(height: 20.h),
                       //常用网站列表
                       _commonWebsiteListView(),
@@ -99,7 +99,7 @@ class _HotKeyPageState extends State<HotKeyPage> {
           itemBuilder: (context, index) {
             var name = value.hotKeyList[index].name;
             return _item(name, onTap: () {
-              RouteUtils.push(context, SearchPage(keyWord: name));
+              RouteUtils.push(context, SearchPage(keyWord: name,type: "false"));
             });
           },
           itemCount: value.hotKeyList.length);

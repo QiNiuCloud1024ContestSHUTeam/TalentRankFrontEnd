@@ -1,0 +1,92 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.zoe.wan.ad" >
+4
+5    <uses-sdk android:minSdkVersion="22" />
+6
+7    <!-- 所需权限 -->
+8    <uses-permission android:name="android.permission.INTERNET" />
+8-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:5:5-67
+8-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:5:22-64
+9    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+9-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:6:5-79
+9-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:6:22-76
+10    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+10-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:7:5-81
+10-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:7:22-78
+11    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+11-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:8:5-80
+11-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:8:22-77
+12    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+12-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:9:5-83
+12-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:9:22-80
+13    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+13-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:10:5-75
+13-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:10:22-72
+14
+15    <!-- 可选权限，申请后用于防作弊功能以及有助于广告平台投放广告 -->
+16    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+16-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:13:5-79
+16-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:13:22-76
+17    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+17-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:14:5-81
+17-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:14:22-78
+18
+19    <permission
+19-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:16:5-18:47
+20        android:name="${applicationId}.openadsdk.permission.TT_PANGOLIN"
+20-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:17:9-73
+21        android:protectionLevel="signature" />
+21-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:18:9-44
+22
+23    <uses-permission android:name="${applicationId}.openadsdk.permission.TT_PANGOLIN" />
+23-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:19:5-89
+23-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:19:22-86
+24
+25    <!-- 建议添加“query_all_package”权限，穿山甲将通过此权限在Android R系统上判定广告对应的应用是否在用户的app上安装，避免投放错误的广告，以此提高用户的广告体验。若添加此权限，需要在您的用户隐私文档中声明！ -->
+26    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+26-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:22:5-77
+26-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:22:22-74
+27
+28    <application>
+28-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:23:5-45:19
+29        <provider
+29-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:24:9-32:20
+30            android:name="com.bytedance.sdk.openadsdk.TTFileProvider"
+30-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:25:13-70
+31            android:authorities="${applicationId}.TTFileProvider"
+31-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:26:13-66
+32            android:exported="false"
+32-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:27:13-37
+33            android:grantUriPermissions="true" >
+33-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:28:13-47
+34            <meta-data
+34-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:29:13-31:54
+35                android:name="android.support.FILE_PROVIDER_PATHS"
+35-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:30:17-67
+36                android:resource="@xml/file_paths" />
+36-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:31:17-51
+37        </provider>
+38        <provider
+38-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:34:9-37:40
+39            android:name="com.bytedance.sdk.openadsdk.multipro.TTMultiProvider"
+39-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:35:13-80
+40            android:authorities="${applicationId}.TTMultiProvider"
+40-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:36:13-67
+41            android:exported="false" />
+41-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:37:13-37
+42        <provider
+42-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:34:9-37:40
+43            android:name="com.bytedance.sdk.openadsdk.multipro.TTMultiProvider"
+43-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:35:13-80
+44            android:authorities="${applicationId}.TTMultiProvider"
+44-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:36:13-67
+45            android:exported="false" />
+45-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:37:13-37
+46
+47        <activity android:name="com.zoe.wan.ad.BannerExpressActivity" />
+47-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:44:9-59
+47-->/Users/gongsensen/AndroidStudioProjects/Powersen_Personal/AndroidNews/openAd/src/main/AndroidManifest.xml:44:19-56
+48    </application>
+49
+50</manifest>

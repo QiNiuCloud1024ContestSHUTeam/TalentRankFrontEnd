@@ -1,13 +1,7 @@
-import 'dart:collection';
-
-import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
-import 'package:dio_cookie_manager/dio_cookie_manager.dart';
-import 'package:wan_android_flutter/http/interceptor/print_log_interceptor.dart';
 import 'package:wan_android_flutter/http/interceptor/rsp_interceptor.dart';
 
 import 'http_method.dart';
-import 'interceptor/cookie_interceptor.dart';
 
 class DioInstance {
   static DioInstance? _instance;
@@ -39,12 +33,7 @@ class DioInstance {
         sendTimeout: sendTimeout ?? _defaultTimeout,
         responseType: responseType,
         contentType: contentType);
-    _dio.interceptors.add(CookieInterceptor());
-    // final cookieJar = CookieJar();
-    // _dio.interceptors.add(CookieManager(cookieJar));
-    _dio.interceptors.add(PrintLogInterceptor());
     _dio.interceptors.add(RspInterceptor());
-
     _inited = true;
   }
 

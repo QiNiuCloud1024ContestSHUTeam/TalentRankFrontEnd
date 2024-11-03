@@ -2,40 +2,30 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wan_android_flutter/common_ui/web/webview_page.dart';
 import 'package:wan_android_flutter/common_ui/web/webview_widget.dart';
-import 'package:wan_android_flutter/pages/about/about_us_page.dart';
-import 'package:wan_android_flutter/pages/auth/login_page.dart';
-import 'package:wan_android_flutter/pages/auth/register_page.dart';
-import 'package:wan_android_flutter/pages/knowledge/details/knowledge_details_tab_page.dart';
-import 'package:wan_android_flutter/pages/my_collects/my_collects_page.dart';
+
 import 'package:wan_android_flutter/pages/search/search_page.dart';
-import 'package:wan_android_flutter/pages/tab_page.dart';
+
+import '../pages/hot/hot_key_page.dart';
+import '../pages/welcome_page.dart';
 
 ///路由注册管理类
 class Routes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
-      //首页tab
-      case RoutePath.tab:
-        return pageRoute(const TabPage(), settings: settings);
-      //知识体系明细页面
-      case RoutePath.knowledge_details:
-        return pageRoute(const KnowledgeDetailsTabPage(), settings: settings);
-      //登录
-      case RoutePath.login:
-        return pageRoute(const LoginPage(), settings: settings);
-      //注册
-      case RoutePath.register:
-        return pageRoute(const RegisterPage(), settings: settings);
-      //我的收藏页面
-      case RoutePath.my_collects:
-        return pageRoute(const MyCollectsPage(), settings: settings);
+
+      //欢迎页
+        case RoutePath.welcome:
+        return pageRoute(WelcomePage(),settings: settings);
+
+        //热点页
+      case RoutePath.hotkey:
+        return pageRoute(const HotKeyPage(),settings: settings);
+
       //显示网页资源的页面
       case RoutePath.web_view:
         return pageRoute(WebViewPage(loadResource: "", webViewType: WebViewType.URL),
             settings: settings);
-      //关于我们
-      case RoutePath.about_us:
-        return pageRoute(const AboutUsPage(), settings: settings);
+
       //搜索页
       case RoutePath.search:
         return pageRoute(const SearchPage(), settings: settings);
@@ -63,20 +53,12 @@ class Routes {
 
 ///路由地址
 class RoutePath {
-  //首页tab
-  static const String tab = "/";
 
-  //登录
-  static const String login = "/login";
+  //热点页面
+  static const String hotkey = "/hotkey";
 
-  //注册
-  static const String register = "/register";
-
-  //知识体系明细页面
-  static const String knowledge_details = "/knowledge_details";
-
-  //我的收藏页面
-  static const String my_collects = "/my_collects";
+  //欢迎页
+  static const String welcome = "/welcome";
 
   //显示网页资源的页面
   static const String web_view = "/web_view";

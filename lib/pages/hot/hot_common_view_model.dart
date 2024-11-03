@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:wan_android_flutter/repository/api/wan_api.dart';
+import 'package:wan_android_flutter/repository/api/zzy_api.dart';
 
 import '../../repository/model/common_website_model.dart';
 import '../../repository/model/search_hot_key_model.dart';
@@ -18,7 +18,7 @@ class HotCommonViewModel with ChangeNotifier {
 
   ///获取搜索热词
   Future getHotKeyList({VoidCallback? complete}) async {
-    var list = await WanApi.instance().searchHotKeys();
+    var list = await ZzyApi.instance().searchHotKeys();
     if (list != null) {
       hotKeyList = list;
       notifyListeners();
@@ -28,7 +28,7 @@ class HotCommonViewModel with ChangeNotifier {
 
   ///获取搜索热词
   Future commonWebsiteList({VoidCallback? complete}) async {
-    var list = await WanApi.instance().commonWebsiteList();
+    var list = await ZzyApi.instance().commonWebsiteList();
     if (list != null) {
       websiteList = list;
       notifyListeners();

@@ -33,9 +33,10 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             useMaterial3: true,
           ),
+          // debugShowCheckedModeBanner: false,
           navigatorKey: RouteUtils.navigatorKey,
           onGenerateRoute: Routes.generateRoute,
-          initialRoute: RoutePath.tab,
+          initialRoute: RoutePath.welcome,
           // home: const TabPage(),
         );
       },
