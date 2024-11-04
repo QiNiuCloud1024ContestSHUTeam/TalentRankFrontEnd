@@ -33,11 +33,10 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             useMaterial3: true,
           ),
-          // debugShowCheckedModeBanner: false,
+          debugShowCheckedModeBanner: false,//处理右上角DEBUG
           navigatorKey: RouteUtils.navigatorKey,
           onGenerateRoute: Routes.generateRoute,
           initialRoute: RoutePath.welcome,
-          // home: const TabPage(),
         );
       },
     ));
