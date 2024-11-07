@@ -25,6 +25,8 @@ class SearchPage extends StatefulWidget {
 
   const SearchPage({this.topicId, this.nation, this.q, this.user});
 
+
+
   @override
   State<StatefulWidget> createState() {
     return _SearchPageState();
@@ -48,29 +50,30 @@ class _SearchPageState extends State<SearchPage> {
 
 
   @override
+  @override
   void initState() {
+    super.initState();
+
     _editController = TextEditingController(text: widget.q ?? "");
     _refreshController = RefreshController(initialRefresh: false);
 
-    //如果携带了topicId就在初始化时进行搜索
     if (widget.topicId != null) {
-      type=0;
-      viewModel.searchReById(false, widget.topicId);
+      _loadRankListById(widget.topicId!);
     }
-
-    super.initState();
-    _refreshController = RefreshController(initialRefresh: false);
-    viewModel.initDataList(true,type);
   }
 
+  Future<void> _loadRankListById(int topicId) async {
+    final result = await viewModel.searchReById(topicId);
+    if (result != null) {
+      setState(() {
+        viewModel.RankList = result;
+      });
+    }
+  }
+
+
   void refreshOrLoad(bool loadMore) {
-    viewModel.initDataList(loadMore, type, complete: (loadMore) {
-      if (loadMore) {
-        _refreshController.loadComplete();  // 上拉加载完成
-      } else {
-        _refreshController.refreshCompleted();  // 刷新完成
-      }
-    });
+    viewModel.initDataList();
   }
 
   @override
@@ -84,7 +87,7 @@ class _SearchPageState extends State<SearchPage> {
           child: Column(
             children: [
               _searchBar(
-                onSubmitted: (value) {
+                onSubmitted: (value) async {
                   if (!value.trim().isNotEmpty) {
                     showToast("输入不可以为空啊！");
                     return;
@@ -92,17 +95,15 @@ class _SearchPageState extends State<SearchPage> {
                   // viewModel.searchList(value);
                   if(selectedFilter){
                     type=1;
-                    viewModel.searchReByUser(
-                      true,
+                    viewModel.RankList = await viewModel.searchReByUser(
                       value
-                    );
+                    ) as List<ScoreUserList>;
                   }else{
                     type=2;
-                    viewModel.searchReByQ(
-                      true,
+                    viewModel.RankList = await viewModel.searchReByQ(
                       value,
                       selectedArea,  // 传递选定的地区
-                    );
+                    ) as List<ScoreUserList>;
                   }
                 },
                 onTapFinish: () {
@@ -138,10 +139,10 @@ class _SearchPageState extends State<SearchPage> {
                               RouteUtils.push(
                                 context,
                                 WebViewPage(
-                                  loadResource: item?.link ?? "",
+                                  loadResource: item?.htmlUrl ?? "",
                                   webViewType: WebViewType.URL,
                                   showTitle: true,
-                                  title: item?.title,
+                                  title: item?.login,
                                 ),
                               );
                             },
@@ -183,8 +184,8 @@ class _SearchPageState extends State<SearchPage> {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(25.r),
-                  child: Image.asset(
-                    "assets/images/luoxiaohei.png",
+                  child: Image.network(
+                    item?.avatarUrl ?? '',
                     width: 80.r,
                     height: 80.r,
                     fit: BoxFit.fill,
@@ -195,12 +196,13 @@ class _SearchPageState extends State<SearchPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    item?.id as String,  // 显示 item?.author，如果为空则显示空字符串
+                    "${item?.login}", // 显示 item?.author，如果为空则显示空字符串
                     style: TextStyle(color: Colors.black, fontSize: 20.sp, fontWeight: FontWeight.bold),  // 设置样式
                   ),
                   Text("nation:${item?.nation ?? ""}",style: TextStyle(color: Colors.black, fontSize: 15.sp),),
-                  Text("followers:100",style: TextStyle(color: Colors.black, fontSize: 15.sp),),
-                  Text("followeings:1000000",style: TextStyle(color: Colors.black, fontSize: 15.sp),),
+                  Text("置信度：${item?.confidence}",style: TextStyle(color: Colors.black, fontSize: 15.sp),),
+                  Text("followers:${item?.followers ?? ""}",style: TextStyle(color: Colors.black, fontSize: 15.sp),),
+                  Text("following:${item?.following ?? ""}",style: TextStyle(color: Colors.black, fontSize: 15.sp),),
                 ],
                 ),
                 const Expanded(child: SizedBox()),
@@ -220,19 +222,19 @@ class _SearchPageState extends State<SearchPage> {
             ),
             SizedBox(height: 5.h),
             Row(children: [
-              const Column(
+               Column(
                   children: [
                 Text(
-                  "9.9分",
-                  style: TextStyle(fontSize: 24,color: Colors.red),
+                  "${item?.topicScore ?? ""}",
+                  style: TextStyle(fontSize: 28,color: Colors.red),
 
                 ),
               ]),
               SizedBox(width: 35.w),
               Expanded(
                 child: Text(
-                  "理由：章则以真的不太会编程，大家千万不要向他学习，一定要学习同济的晨男老师",
-                  style: TextStyle(fontSize: 16),
+                  "个人简介：${item?.bio}",
+                  style: TextStyle(fontSize: 18),
                   softWrap: true,  // 自动换行
                 ),
               )
@@ -247,12 +249,12 @@ class _SearchPageState extends State<SearchPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                   Text(
-                    "简介：",
+                    "blog：${item?.blog}",
                     style: TextStyle(fontSize: 14.sp, color: Colors.black54),
                   ),
                   SizedBox(height: 5.h),
                   Text(
-                    "热门仓库：",
+                    "所属公司：${item?.company}",
                     style: TextStyle(fontSize: 14.sp, color: Colors.black54),
                   ),
                 ],)
@@ -381,7 +383,7 @@ class _SearchPageState extends State<SearchPage> {
                       SizedBox(width: 10.w),  // 增加间距
                       Expanded(
                         child: Text(
-                          selectedArea == "None" ? "None" : selectedArea,  // 显示选择的地区
+                          selectedArea == "" ? "" : selectedArea,  // 显示选择的地区
                           style: TextStyle(fontSize: 14.sp, color: Colors.black87), // 根据需要调整样式
                         ),
                       ),
@@ -405,7 +407,7 @@ class _SearchPageState extends State<SearchPage> {
                         onPressed: () {
                           setState(() {
                             selectedFilter = false;
-                            selectedArea = "None";
+                            selectedArea = "";
                           });
                         },
                         child: Text("重置"),

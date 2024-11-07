@@ -40,7 +40,7 @@ class ZzyApi {
   Future<AllKeyModel> searchAllKeys({required int page}) async {
     Response response = await DioInstance.instance()
         .get(path: "/topic/listTopic", param: {"page": page, "pageSize": 40});
-    print(response);
+    // print(response);
     var model = AllKeyModel.fromJson(response.data);
     return model;
   }
@@ -65,32 +65,35 @@ class ZzyApi {
 
 //通过Id进行查找
   Future<UserDatum> searchReById(
-      {required int page, required int topicId}) async {
+      {required int topicId}) async {
+    // print(topicId);
+    List<int>? topicIds = [];
+    topicIds.add(topicId);
     Response response = await DioInstance.instance().get(
         path: "/rank/rankByStaticTopic",
-        param: {"page": page, "pageSize": 5, "topicIds": topicId});
-    print(response);
+        param: {"pageSize": 100, "topicIds": topicIds.join(',')});
     var model = UserDatum.fromJson(response.data);
+    // print(response);
     return model;
   }
 
   //通过q进行查找
-  Future<UserDatum> searchReByQ({required int page, required String q, required String nation}) async {
+  Future<UserDatum> searchReByQ({required String q, required String nation}) async {
     Response response = await DioInstance.instance().get(
         path: "/rank/rankBySearchString",
-        param: {"page": page, "pageSize": 5, "q": q,"nation": nation}
+        param: {"pageSize": 100, "q": q,"nation": nation}
     );
-    print(response);
+    // print(response);
     var model = UserDatum.fromJson(response.data);
     return model;
   }
 
   //通过用户进行查找
   Future<UserDatum> searchReByUser(
-      {required int page, required String user}) async {
+      {required String user}) async {
     Response response = await DioInstance.instance().get(
         path: "/user/localSearch",
-        param: {"page": page, "pageSize": 5, "keyword": user});
+        param: {"pageSize": 100, "keyword": user});
     print(response);
     var model = UserDatum.fromJson(response.data);
     return model;

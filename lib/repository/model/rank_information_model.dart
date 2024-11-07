@@ -26,7 +26,9 @@ class RankInformationModel {
 class UserDatum {
   UserDatum({
       this.total, 
-      this.scoreUserList,});
+      this.scoreUserList,
+      this.userIdToReposMap
+  });
 
   UserDatum.fromJson(dynamic json) {
     total = json['total'];
@@ -36,10 +38,19 @@ class UserDatum {
         scoreUserList?.add(ScoreUserList.fromJson(v));
       });
     }
+
+    if(json['userIdToReposMap'] != null) {
+      userIdToReposMap = {};
+      json['userIdToReposMap'].forEach((key, value) {
+        int userId = int.parse(key);
+        List<Repo> repos = (value as List).map((v) => Repo.fromJson(v)).toList();
+        userIdToReposMap?[userId] = repos;
+      });
+    }
   }
   num? total;
   List<ScoreUserList>? scoreUserList;
-
+  Map<int, List<Repo>>? userIdToReposMap;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -49,7 +60,6 @@ class UserDatum {
     }
     return map;
   }
-
 }
 /// topicScore : 6.057591996187196
 /// login : "mrdoob"
@@ -128,7 +138,7 @@ class ScoreUserList {
       this.confidence,});
 
   ScoreUserList.fromJson(dynamic json) {
-    topicScore = json['topicScore'];
+    topicScore = double.parse((json['topicScore'] as double).toStringAsFixed(1));
     login = json['login'];
     id = json['id'];
     nodeId = json['nodeId'];
@@ -243,4 +253,148 @@ class ScoreUserList {
     return map;
   }
 
+  @override
+  String toString() {
+    return 'ScoreUserList(name: $name, score: $topicScore)';
+  }
+}
+
+class RepoList {
+  RepoList({
+    this.repolist,});
+
+  RepoList.fromJson(dynamic json) {
+    if (json['repo'] != null) {
+      repolist = [];
+      json['repo'].forEach((v) {
+        repolist?.add(Repo.fromJson(v));
+      });
+    }
+  }
+  List<Repo>? repolist;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    if (repolist != null) {
+      map['repo'] = repolist?.map((v) => v.toJson()).toList();
+    }
+    return map;
+  }
+
+}
+
+class Repo {
+  Repo({
+    this.id,
+    this.nodeId,
+    this.name,
+    this.fullName,
+    this.privateFlag,
+    this.htmlUrl,
+    this.description,
+    this.fork,
+    this.url,
+    this.languagesUrl,
+    this.createdAt,
+    this.updatedAt,
+    this.pushedAt,
+    this.gitUrl,
+    this.sshUrl,
+    this.cloneUrl,
+    this.homepage,
+    this.stargazersCount,
+    this.language,
+    this.hasIssues,
+    this.forksCount,
+    this.openIssuesCount,
+    this.allowForking,
+    this.visibility,
+    this.score,});
+
+  Repo.fromJson(dynamic json) {
+    id = json['id'];
+    nodeId = json['nodeId'];
+    name = json['name'];
+    fullName = json['fullName'];
+    privateFlag = json['privateFlag'];
+    htmlUrl = json['htmlUrl'];
+    description = json['description'];
+    fork = json['fork'];
+    url = json['url'];
+    languagesUrl = json['languagesUrl'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    pushedAt = json['pushedAt'];
+    gitUrl = json['gitUrl'];
+    sshUrl = json['sshUrl'];
+    cloneUrl = json['cloneUrl'];
+    homepage = json['homepage'];
+    stargazersCount = json['stargazersCount'];
+    language = json['language'];
+    hasIssues = json['hasIssues'];
+    forksCount = json['forksCount'];
+    openIssuesCount = json['openIssuesCount'];
+    allowForking = json['allowForking'];
+    visibility = json['visibility'];
+    score = json['score'];
+  }
+  num? id;
+  String? nodeId;
+  String? name;
+  String? fullName;
+  bool? privateFlag;
+  String? htmlUrl;
+  String? description;
+  bool? fork;
+  String? url;
+  String? languagesUrl;
+  String? createdAt;
+  String? updatedAt;
+  String? pushedAt;
+  String? gitUrl;
+  String? sshUrl;
+  String? cloneUrl;
+  String? homepage;
+  num? stargazersCount;
+  String? language;
+  bool? hasIssues;
+  num? forksCount;
+  num? openIssuesCount;
+  bool? allowForking;
+  String? visibility;
+  num? score;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['id'] = id;
+    map['nodeId'] = nodeId;
+    map['name'] = name;
+    map['fullName'] = fullName;
+    map['privateFlag'] = privateFlag;
+    map['htmlUrl'] = htmlUrl;
+    map['description'] = description;
+    map['fork'] = fork;
+    map['url'] = url;
+    map['languagesUrl'] = languagesUrl;
+    map['createdAt'] = createdAt;
+    map['updatedAt'] = updatedAt;
+    map['pushedAt'] = pushedAt;
+    map['gitUrl'] = gitUrl;
+    map['sshUrl'] = sshUrl;
+    map['cloneUrl'] = cloneUrl;
+    map['homepage'] = homepage;
+    map['stargazersCount'] = stargazersCount;
+    map['language'] = language;
+    map['hasIssues'] = hasIssues;
+    map['forksCount'] = forksCount;
+    map['openIssuesCount'] = openIssuesCount;
+    map['allowForking'] = allowForking;
+    map['visibility'] = visibility;
+    map['score'] = score;
+    return map;
+  }
+  @override
+  String toString() {
+    return 'Repo(repoName: $name, repoUrl: $htmlUrl)';
+  }
 }
