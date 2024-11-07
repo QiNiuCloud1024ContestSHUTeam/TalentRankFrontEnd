@@ -1,8 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:wan_android_flutter/http/dio_instance.dart';
-import '../model/common_website_model.dart';
+
+// import '../model/common_website_model.dart';
 import '../model/home_list_model.dart';
-import '../model/search_hot_key_model.dart';
+import '../model/rank_information_model.dart';
+import '../model/search_allkey_model.dart';
 import '../model/search_list_model.dart';
 
 class ZzyApi {
@@ -24,32 +26,23 @@ class ZzyApi {
     //     receiveTimeout: Duration(seconds: 30),
     //     sendTimeout: Duration(seconds: 30));
     // Response response = await dio.get("article/list/0/json");
-    Response response = await DioInstance.instance().get(path: "article/list/$pageCount/json");
+    Response response =
+        await DioInstance.instance().get(path: "article/list/$pageCount/json");
+    print("111");
     // var model = HomeListModel();
     // model.fromData(response.data);
     return HomeListModel.fromJson(response.data);
     // return null;
   }
-  ///获取置顶文章列表
-  Future<HomeTopListModel> topHomeList() async {
-    Response response = await DioInstance.instance().get(path: "article/top/json");
-    return HomeTopListModel.fromJson(response.data);
-  }
 
 
-  //当前需求：增加一个常用领域的后端接口
-  ///获取搜索热词
-  Future<List<SearchHotKeyModel>?> searchHotKeys() async {
-    Response response = await DioInstance.instance().get(path: "hotkey/json");
-    var model = SearchHotKeyListModel.fromJson(response.data);
-    return model.list;
-  }
-
-  ///获取常用网站
-  Future<List<CommonWebsiteModel>?> commonWebsiteList() async {
-    Response response = await DioInstance.instance().get(path: "friend/json");
-    var model = CommonWebsiteListModel.fromJson(response.data);
-    return model.list;
+  ///获取全部领域
+  Future<AllKeyModel> searchAllKeys({required int page}) async {
+    Response response = await DioInstance.instance()
+        .get(path: "/topic/listTopic", param: {"page": page, "pageSize": 40});
+    print(response);
+    var model = AllKeyModel.fromJson(response.data);
+    return model;
   }
 
 
@@ -70,22 +63,37 @@ class ZzyApi {
     return [];
   }
 
-  ///用户or领域搜索
-  Future<List<SearchListItemModel>?> searchRe({required String keyWord,required String type}) async {
-    Response rsp = await DioInstance.instance()
-        .post(path: "article/query/0/json", queryParameters: {"k": keyWord,"type": type});
-    SearchListModel? model = SearchListModel.fromJson(rsp.data);
+//通过Id进行查找
+  Future<UserDatum> searchReById(
+      {required int page, required int topicId}) async {
+    Response response = await DioInstance.instance().get(
+        path: "/rank/rankByStaticTopic",
+        param: {"page": page, "pageSize": 5, "topicIds": topicId});
+    print(response);
+    var model = UserDatum.fromJson(response.data);
+    return model;
+  }
 
-    // print(type);
-    // 输出完整的请求 URL 到控制台
-    // final baseUrl = "https://https://bigzzy.good/"; // 替换为你的基础 URL
-    // final fullUrl = "$baseUrl/article/query/0/json?k=$keyWord&type=$type";
-    // print("Request URL: $fullUrl");
+  //通过q进行查找
+  Future<UserDatum> searchReByQ({required int page, required String q, required String nation}) async {
+    Response response = await DioInstance.instance().get(
+        path: "/rank/rankBySearchString",
+        param: {"page": page, "pageSize": 5, "q": q,"nation": nation}
+    );
+    print(response);
+    var model = UserDatum.fromJson(response.data);
+    return model;
+  }
 
-    if (model.datas != null && model.datas?.isNotEmpty == true) {
-      return model.datas;
-    }
-    return [];
+  //通过用户进行查找
+  Future<UserDatum> searchReByUser(
+      {required int page, required String user}) async {
+    Response response = await DioInstance.instance().get(
+        path: "/user/localSearch",
+        param: {"page": page, "pageSize": 5, "keyword": user});
+    print(response);
+    var model = UserDatum.fromJson(response.data);
+    return model;
   }
 
 }

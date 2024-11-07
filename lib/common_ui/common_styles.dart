@@ -8,7 +8,7 @@ TextStyle whiteTextStyle14 = TextStyle(color: Colors.white, fontSize: 14.sp);
 //白色字体15号
 TextStyle whiteTextStyle15 = TextStyle(color: Colors.white, fontSize: 15.sp);
 //标题文本15号
-TextStyle titleTextStyle15 = TextStyle(color: Colors.black, fontSize: 15.sp);
+TextStyle titleTextStyle15 = TextStyle(color: Colors.black, fontSize: 20.sp);
 //黑色字体13号
 TextStyle blackTextStyle13 = TextStyle(fontSize: 13.sp, color: Colors.black);
 //普通字体，只做判空处理

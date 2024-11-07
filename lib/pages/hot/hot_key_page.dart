@@ -8,8 +8,6 @@ import 'package:wan_android_flutter/pages/hot/hot_common_view_model.dart';
 import 'package:wan_android_flutter/pages/search/search_page.dart';
 
 import '../../common_ui/common_styles.dart';
-import '../../common_ui/web/webview_page.dart';
-import '../../common_ui/web/webview_widget.dart';
 import '../../route/RouteUtils.dart';
 
 ///热点搜索页面
@@ -30,7 +28,7 @@ class _HotKeyPageState extends State<HotKeyPage> {
   void initState() {
     _refreshController = RefreshController(initialRefresh: false);
     super.initState();
-    model.getData();
+    model.initKeyList(true); // 初始加载第一页数据
   }
 
   @override
@@ -44,28 +42,25 @@ class _HotKeyPageState extends State<HotKeyPage> {
             body: SafeArea(
                 child: SmartRefreshWidget(
                     controller: _refreshController,
-                    //禁止上拉
-                    enablePullUp: false,
-                    onRefresh: () {
-                      //刷新回调
-                      model.getData(complete: () {
-                        //结束刷新
-                        _refreshController.refreshCompleted();
+                    enablePullUp: true,
+                    // 启用上拉加载
+                    enablePullDown: false,
+                    onLoading: () {
+                      model.initKeyList(true, complete: (isLoadMore) {
+                        if (isLoadMore) {
+                          _refreshController.loadComplete();
+                        } else {
+                          _refreshController.refreshCompleted();
+                        }
                       });
                     },
                     child: SingleChildScrollView(
                         child: Column(children: [
-                      _titleWidget("热门领域", true, onTap: () {
+                      _titleWidget("全部领域", true, onTap: () {
                         RouteUtils.push(context, const SearchPage());
                       }),
                       SizedBox(height: 20.h),
-                      //搜索热词列表
-                      _searchHotKeyListView(),
-                      SizedBox(height: 20.h),
-                      _titleWidget("所有领域", false),
-                      SizedBox(height: 20.h),
-                      //常用网站列表
-                      _commonWebsiteListView(),
+                      _searchAllKeysListView(),
                       SizedBox(height: 20.h),
                     ]))))));
   }
@@ -84,7 +79,8 @@ class _HotKeyPageState extends State<HotKeyPage> {
                 normalText(title),
                 GestureDetector(
                     onTap: onTap,
-                    child: Image.asset("assets/images/icon_search.png", width: 30.r, height: 30.r))
+                    child: Image.asset("assets/images/icon_search.png",
+                        width: 30.r, height: 30.r))
               ])
             : normalText(title),
       ),
@@ -92,42 +88,61 @@ class _HotKeyPageState extends State<HotKeyPage> {
     ]);
   }
 
-  ///搜索热词列表
-  Widget _searchHotKeyListView() {
+  ///搜索热门领域
+  // Widget _searchHotKeyListView() {
+  //   return Consumer<HotCommonViewModel>(builder: (context, value, child) {
+  //     return _gridview(
+  //         itemBuilder: (context, index) {
+  //           var name = value.hotKeyList[index].name;
+  //           return _item(name, onTap: () {
+  //             RouteUtils.push(context, SearchPage(keyWord: name,type: "false",nation: "None",));
+  //           });
+  //         },
+  //         itemCount: value.hotKeyList.length);
+  //   });
+  // }
+
+  ///搜索全部领域
+  Widget _searchAllKeysListView() {
     return Consumer<HotCommonViewModel>(builder: (context, value, child) {
       return _gridview(
           itemBuilder: (context, index) {
-            var name = value.hotKeyList[index].name;
+            var name = value.allKeyList[index].topicName;
             return _item(name, onTap: () {
-              RouteUtils.push(context, SearchPage(keyWord: name,type: "false"));
+              RouteUtils.push(
+                  context,
+                  SearchPage(
+                    topicId: value.allKeyList[index].topicId,
+                  ));
             });
           },
-          itemCount: value.hotKeyList.length);
+          itemCount: value.allKeyList.length);
     });
   }
 
   ///常用网站列表
-  Widget _commonWebsiteListView({GestureTapCallback? itemClick}) {
-    return Consumer<HotCommonViewModel>(builder: (context, value, child) {
-      return _gridview(
-          itemBuilder: (context, index) {
-            return _item(value.websiteList[index].name, onTap: () {
-              //进入网页
-              RouteUtils.push(
-                  context,
-                  WebViewPage(
-                      loadResource: value.websiteList[index].link ?? "",
-                      webViewType: WebViewType.URL,
-                      showTitle: true,
-                      title: value.websiteList[index].name));
-            });
-          },
-          itemCount: value.websiteList.length);
-    });
-  }
+  // Widget _commonWebsiteListView({GestureTapCallback? itemClick}) {
+  //   return Consumer<HotCommonViewModel>(builder: (context, value, child) {
+  //     return _gridview(
+  //         itemBuilder: (context, index) {
+  //           return _item(value.websiteList[index].name, onTap: () {
+  //             //进入网页
+  //             RouteUtils.push(
+  //                 context,
+  //                 WebViewPage(
+  //                     loadResource: value.websiteList[index].link ?? "",
+  //                     webViewType: WebViewType.URL,
+  //                     showTitle: true,
+  //                     title: value.websiteList[index].name));
+  //           });
+  //         },
+  //         itemCount: value.websiteList.length);
+  //   });
+  // }
 
   ///通用网格布局
-  Widget _gridview<T>({required NullableIndexedWidgetBuilder itemBuilder, int? itemCount}) {
+  Widget _gridview<T>(
+      {required NullableIndexedWidgetBuilder itemBuilder, int? itemCount}) {
     return Container(
         margin: EdgeInsets.symmetric(horizontal: 15.w),
         child: GridView.builder(

@@ -13,13 +13,13 @@ class RspInterceptor extends Interceptor {
         handler.next(response);
       } else {
         var rsp = BaseModel.fromJson(response.data);
-        if (rsp.errorCode == 0) {
+        if (rsp.code == 1) {
           if (rsp.data == null) {
             handler.next(Response(requestOptions: response.requestOptions, data: true));
           } else {
             handler.next(Response(requestOptions: response.requestOptions, data: rsp.data));
           }
-        } else if (rsp.errorCode == -1001) {
+        } else if (rsp.code == -1001) {
           handler.reject(DioException(requestOptions: response.requestOptions, message: "..."));
           showToast("请先登录");
         } else {

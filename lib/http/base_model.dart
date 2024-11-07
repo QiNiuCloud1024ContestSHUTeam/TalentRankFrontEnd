@@ -1,11 +1,11 @@
   class BaseModel<T> {
   T? data;
-  int? errorCode;
-  String? errorMsg;
+  int? code;
+  String? msg;
 
   BaseModel.fromJson(dynamic json) {
     data = json['data'];
-    errorCode = json['errorCode'];
-    errorMsg = json['errorMsg'];
+    code = json['code'];
+    msg = json['msg'];
   }
 }

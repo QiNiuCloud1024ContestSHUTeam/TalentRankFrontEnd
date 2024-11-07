@@ -13,7 +13,7 @@ class DioInstance {
   }
 
   Dio _dio = Dio();
-  final _defaultTimeout = const Duration(seconds: 30);
+  final _defaultTimeout = const Duration(seconds: 100);
   var _inited = false;
 
   void initDio({
