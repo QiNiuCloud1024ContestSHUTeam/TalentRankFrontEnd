@@ -1,16 +1,4 @@
-# wan_android_flutter
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# search_android_flutter
+这是一个针对2024七牛云比赛的移动端开发的前端项目；
+笨人接触flutter半个月，代码中若有不妥当之处还请大佬指点；
+本项目参考bilibili某课程项目，感兴趣的同学可以去看看；
